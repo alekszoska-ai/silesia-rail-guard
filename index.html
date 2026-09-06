@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#f0f4ff" />
+  <meta name="theme-color" content="#e8f4fc" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -25,30 +25,30 @@
       --header-h: 70px;
       --nav-h: 76px;
 
-      --glass-bg: rgba(255, 255, 255, 0.75);
-      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-bg: rgba(255, 255, 255, 0.78);
+      --glass-border: rgba(180, 220, 245, 0.50);
       --glass-blur: blur(20px) saturate(180%);
       --glass-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.08),
-        0 1px 0 rgba(255, 255, 255, 0.8) inset;
+        0 4px 16px rgba(100, 170, 220, 0.10),
+        0 1px 0 rgba(255, 255, 255, 0.85) inset;
       --glass-radius: 20px;
 
-      /* Kolory ikon kafelków */
-      --c1: #5eaeff;
+      /* Kolory ikon kafelków – błękitno-turkusowa paleta */
+      --c1: #2e8bc0;
       /* niebieski   – aktualności  */
-      --c2: #66e09a;
-      /* zielony     – notatki      */
-      --c3: #f0c040;
-      /* złoty       – słowo/modl.  */
-      --c4: #b87fff;
-      /* fiolet      – o parafii    */
-      --c5: #ff7eb3;
-      /* różowy      – wspólnoty    */
-      --c6: #aee8ff;
-      /* błękitny    – cmentarz     */
-      --c7: #ffaa55;
-      /* pomarańcz   – pielgrzym    */
-      --c8: #80f0e0;
+      --c2: #36a2a0;
+      /* turkus      – notatki      */
+      --c3: #4bb3d0;
+      /* jasny błękit – słowo/modl. */
+      --c4: #1a6fa0;
+      /* ciemny błękit – o parafii  */
+      --c5: #5cc4c4;
+      /* seledynowy  – wspólnoty    */
+      --c6: #6dd4e0;
+      /* aqua        – cmentarz     */
+      --c7: #2090b0;
+      /* petrol      – pielgrzym    */
+      --c8: #40c8b8;
       /* turkus      – asystent     */
     }
 
@@ -67,13 +67,9 @@
     body {
       height: 100%;
       font-family: var(--font);
-      background-image: url('./assets/images/PWA%20Radomsko1.jpeg');
-      background-size: cover;
-      background-position: center;
+      background: linear-gradient(160deg, #e8f4fc 0%, #d4eef8 40%, #c8e8f4 70%, #daf0f0 100%);
       background-attachment: fixed;
-      background-repeat: no-repeat;
-      background-color: #f5f7fa;
-      color: #2a3342;
+      color: #1e3348;
       -webkit-font-smoothing: antialiased;
       overflow: hidden;
     }
@@ -96,9 +92,9 @@
       position: fixed;
       inset: 0;
       background: linear-gradient(180deg,
-          rgba(255, 255, 255, 0.85) 0%,
-          rgba(240, 248, 255, 0.90) 50%,
-          rgba(230, 240, 250, 0.95) 100%);
+          rgba(232, 244, 252, 0.60) 0%,
+          rgba(210, 238, 248, 0.55) 50%,
+          rgba(200, 232, 244, 0.50) 100%);
       z-index: -1;
       pointer-events: none;
     }
@@ -131,9 +127,9 @@
       height: 1.5px;
       background: linear-gradient(90deg,
           transparent,
-          rgba(220, 175, 60, 0.70) 25%,
-          rgba(255, 220, 80, 1.00) 50%,
-          rgba(220, 175, 60, 0.70) 75%,
+          rgba(46, 139, 192, 0.40) 25%,
+          rgba(75, 179, 208, 0.60) 50%,
+          rgba(46, 139, 192, 0.40) 75%,
           transparent);
     }
 
@@ -146,16 +142,15 @@
     .header-parish-name {
       font-size: 12px;
       font-weight: 800;
-      color: rgba(42, 51, 66, 0.95);
+      color: #1a3550;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.40);
     }
 
     .header-date {
       font-size: 10.5px;
-      font-weight: 400;
-      color: rgba(42, 51, 66, 0.6);
+      font-weight: 500;
+      color: #3a5a72;
       letter-spacing: 0.03em;
       display: flex;
       align-items: center;
@@ -164,14 +159,14 @@
     }
 
     .header-date-sep {
-      color: #d89f20;
+      color: #4bb3d0;
       font-size: 9px;
     }
 
     .header-liturgy {
-      color: #b38200;
+      color: #2e8bc0;
       font-style: italic;
-      font-weight: 400;
+      font-weight: 500;
     }
 
     .header-avatar {
@@ -200,12 +195,12 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      opacity: 0.25;
+      opacity: 0.20;
     }
 
     .header-cross i {
       font-size: 22px;
-      color: #f0c040;
+      color: #4bb3d0;
     }
 
     /* ============================================================
@@ -428,42 +423,42 @@
 
     .tile-1 .tile-icon i {
       color: var(--c1);
-      filter: drop-shadow(0 2px 8px rgba(94, 174, 255, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(46, 139, 192, 0.40));
     }
 
     .tile-2 .tile-icon i {
       color: var(--c2);
-      filter: drop-shadow(0 2px 8px rgba(102, 224, 154, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(54, 162, 160, 0.40));
     }
 
     .tile-3 .tile-icon i {
       color: var(--c3);
-      filter: drop-shadow(0 2px 8px rgba(240, 192, 64, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(75, 179, 208, 0.40));
     }
 
     .tile-4 .tile-icon i {
       color: var(--c4);
-      filter: drop-shadow(0 2px 8px rgba(184, 127, 255, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(26, 111, 160, 0.40));
     }
 
     .tile-5 .tile-icon i {
       color: var(--c5);
-      filter: drop-shadow(0 2px 8px rgba(255, 126, 179, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(92, 196, 196, 0.40));
     }
 
     .tile-6 .tile-icon i {
       color: var(--c6);
-      filter: drop-shadow(0 2px 8px rgba(174, 232, 255, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(109, 212, 224, 0.40));
     }
 
     .tile-7 .tile-icon i {
       color: var(--c7);
-      filter: drop-shadow(0 2px 8px rgba(255, 170, 85, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(32, 144, 176, 0.40));
     }
 
     .tile-8 .tile-icon i {
       color: var(--c8);
-      filter: drop-shadow(0 2px 8px rgba(128, 240, 224, 0.60));
+      filter: drop-shadow(0 2px 6px rgba(64, 200, 184, 0.40));
     }
 
     @media (hover: hover) {
@@ -1274,12 +1269,163 @@
       }
 
       // --- 1. SILNIK LITURGICZNY, DATA I CYTATY ---
+
+      /* ---------- Kalendarz liturgiczny (uproszczony) ---------- */
+      function getLiturgicalDay(date) {
+        const y = date.getFullYear();
+
+        // Oblicz datę Wielkanocy algorytmem Gaussa/Meeus'a
+        const a = y % 19;
+        const b = Math.floor(y / 100);
+        const c = y % 100;
+        const d = Math.floor(b / 4);
+        const e = b % 4;
+        const f = Math.floor((b + 8) / 25);
+        const g = Math.floor((b - f + 1) / 3);
+        const h = (19 * a + b - d - g + 15) % 30;
+        const i = Math.floor(c / 4);
+        const k = c % 4;
+        const l = (32 + 2 * e + 2 * i - h - k) % 7;
+        const m = Math.floor((a + 11 * h + 22 * l) / 451);
+        const month = Math.floor((h + l - 7 * m + 114) / 31);
+        const day = ((h + l - 7 * m + 114) % 31) + 1;
+        const easter = new Date(y, month - 1, day);
+
+        // Pomocnicze daty
+        function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+        function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+
+        const christmas = new Date(y, 11, 25);
+        const epiphany = new Date(y, 0, 6);
+        const ashWednesday = addDays(easter, -46);
+        const palmSunday = addDays(easter, -7);
+        const holyThursday = addDays(easter, -3);
+        const goodFriday = addDays(easter, -2);
+        const holySaturday = addDays(easter, -1);
+        const ascension = addDays(easter, 39);
+        const pentecost = addDays(easter, 49);
+        const corpusChristi = addDays(easter, 60);
+        const allSaints = new Date(y, 10, 1);
+        const allSouls = new Date(y, 10, 2);
+        const assumption = new Date(y, 7, 15);
+        const immaculate = new Date(y, 11, 8);
+
+        // Sprawdź święta stałe i ruchome
+        if (sameDay(date, christmas)) return 'Boże Narodzenie';
+        if (sameDay(date, new Date(y, 11, 24))) return 'Wigilia Bożego Narodzenia';
+        if (sameDay(date, new Date(y, 11, 26))) return 'Św. Szczepana';
+        if (sameDay(date, new Date(y, 0, 1))) return 'Świętej Bożej Rodzicielki Maryi';
+        if (sameDay(date, epiphany)) return 'Objawienie Pańskie (Trzech Króli)';
+        if (sameDay(date, new Date(y, 1, 2))) return 'Ofiarowanie Pańskie (MB Gromniczna)';
+        if (sameDay(date, assumption)) return 'Wniebowzięcie NMP';
+        if (sameDay(date, allSaints)) return 'Uroczystość Wszystkich Świętych';
+        if (sameDay(date, allSouls)) return 'Wspomnienie Wszystkich Wiernych Zmarłych';
+        if (sameDay(date, immaculate)) return 'Niepokalane Poczęcie NMP';
+        if (sameDay(date, ashWednesday)) return 'Środa Popielcowa';
+        if (sameDay(date, palmSunday)) return 'Niedziela Palmowa';
+        if (sameDay(date, holyThursday)) return 'Wielki Czwartek';
+        if (sameDay(date, goodFriday)) return 'Wielki Piątek';
+        if (sameDay(date, holySaturday)) return 'Wielka Sobota';
+        if (sameDay(date, easter)) return 'Niedziela Zmartwychwstania Pańskiego';
+        if (sameDay(date, addDays(easter, 1))) return 'Poniedziałek Wielkanocny';
+        if (sameDay(date, ascension)) return 'Wniebowstąpienie Pańskie';
+        if (sameDay(date, pentecost)) return 'Zesłanie Ducha Świętego';
+        if (sameDay(date, addDays(pentecost, 1))) return 'NMP Matki Kościoła';
+        if (sameDay(date, corpusChristi)) return 'Boże Ciało';
+        if (sameDay(date, new Date(y, 5, 24))) return 'Uroczystość Narodzenia św. Jana Chrzciciela';
+        if (sameDay(date, new Date(y, 7, 6))) return 'Przemienienie Pańskie';
+        if (sameDay(date, new Date(y, 10, 11))) return 'Święto Niepodległości';
+
+        // Okres liturgiczny + niedziela zwykła
+        const dayOfWeek = date.getDay();
+        const msDiff = date.getTime() - easter.getTime();
+        const daysDiff = Math.round(msDiff / 86400000);
+
+        // Adwent: od 4 niedziel przed Bożym Narodzeniem
+        const christmasDay = christmas.getDay();
+        const advent1 = addDays(christmas, -(christmasDay === 0 ? 28 : 21 + christmasDay));
+        if (date >= advent1 && date < christmas) {
+          if (dayOfWeek === 0) {
+            const weekNum = Math.floor((date - advent1) / 604800000) + 1;
+            return weekNum + '. Niedziela Adwentu';
+          }
+          return 'Okres Adwentu';
+        }
+
+        // Okres Bożego Narodzenia
+        if ((date.getMonth() === 11 && date.getDate() >= 25) || (date.getMonth() === 0 && date <= epiphany)) {
+          return 'Okres Bożego Narodzenia';
+        }
+
+        // Wielki Post
+        if (date >= ashWednesday && date < palmSunday) {
+          if (dayOfWeek === 0) {
+            const weekNum = Math.floor((date - ashWednesday) / 604800000) + 1;
+            return weekNum + '. Niedziela Wielkiego Postu';
+          }
+          return 'Okres Wielkiego Postu';
+        }
+
+        // Wielki Tydzień
+        if (date >= palmSunday && date < easter) {
+          return 'Wielki Tydzień';
+        }
+
+        // Okres Wielkanocny
+        if (date >= easter && date <= pentecost) {
+          if (dayOfWeek === 0 && daysDiff > 0 && daysDiff < 49) {
+            const weekNum = Math.floor(daysDiff / 7) + 1;
+            return weekNum + '. Niedziela Wielkanocna';
+          }
+          return 'Okres Wielkanocny';
+        }
+
+        // Okres Zwykły
+        if (dayOfWeek === 0) {
+          // Oblicz numer niedzieli zwykłej
+          const jan1 = new Date(y, 0, 1);
+          const dayOfYear = Math.floor((date - jan1) / 86400000) + 1;
+          const weekNum = Math.ceil(dayOfYear / 7);
+          // Korekta – odejmij tygodnie okresów specjalnych (uproszczenie)
+          let ordWeek;
+          if (date < ashWednesday) {
+            // Przed Wielkim Postem – po Bożym Narodzeniu
+            const baptism = addDays(epiphany, (7 - epiphany.getDay()) % 7 || 7);
+            ordWeek = Math.floor((date - baptism) / 604800000) + 2;
+          } else {
+            // Po Zesłaniu Ducha Świętego
+            const weeksAfterPentecost = Math.floor((date - pentecost) / 604800000);
+            ordWeek = 34 - Math.floor((advent1 - date) / 604800000);
+            if (ordWeek < 1) ordWeek = weeksAfterPentecost + 9;
+          }
+          if (ordWeek >= 1 && ordWeek <= 34) {
+            return ordWeek + '. Niedziela Zwykła';
+          }
+        }
+
+        // Dzień powszedni
+        const dayNames = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+        return dayNames[dayOfWeek] + ' – Okres Zwykły';
+      }
+
+      /* ---------- Aktualizacja nagłówka ---------- */
       function updateHeaderDate() {
         const dateEl = document.getElementById('todayDate');
+        const sepEl = document.getElementById('liturgySep');
+        const litEl = document.getElementById('liturgyDay');
+        const now = new Date();
+
         if (dateEl) {
-          const options = { day: 'numeric', month: 'long', year: 'numeric' };
-          const todayString = new Date().toLocaleDateString('pl-PL', options);
-          dateEl.textContent = todayString;
+          const dayNames = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+          const monthNames = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
+            'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+          dateEl.textContent = dayNames[now.getDay()] + ', ' + now.getDate() + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear();
+        }
+
+        if (litEl) {
+          const liturgy = getLiturgicalDay(now);
+          litEl.textContent = liturgy;
+          if (sepEl) sepEl.style.display = 'inline';
         }
       }
       updateHeaderDate();
