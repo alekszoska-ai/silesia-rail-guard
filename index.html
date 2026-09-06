@@ -770,25 +770,24 @@
     }
 
     .about-hero-image {
+      display: block;
       width: 100%;
-      flex: 1;
-      min-height: 120px;
-      max-height: 250px;
+      height: 140px;
       border-radius: 16px;
-      background-image: url('./assets/images/PWA%20Radomsko1.jpeg');
+      background-image: url('assets/images/PWA Radomsko1.jpeg');
       background-size: cover;
       background-position: top center;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.4);
+      flex-shrink: 0;
     }
 
     .about-tiles-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      flex-shrink: 0;
-      justify-content: flex-end;
+      justify-content: space-between;
+      flex: 1;
       padding-bottom: 10px;
     }
 
