@@ -761,21 +761,20 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 14px;
+      padding: 10px 14px;
       position: relative;
       z-index: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden; /* Powrót do braku scrollowania na głównym ekranie */
     }
 
     .about-hero-image {
       width: 100%;
-      height: 160px;
-      border-radius: 18px;
+      height: 100px;
+      border-radius: 16px;
       background-image: url('./assets/images/PWA%20Radomsko1.jpeg');
       background-size: cover;
       background-position: center;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.4);
       flex-shrink: 0;
@@ -784,9 +783,9 @@
     .about-tiles-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
       flex: 1;
-      padding-bottom: 20px;
+      padding-bottom: 10px;
     }
 
     .about-tile {
@@ -800,8 +799,8 @@
       flex-direction: row; /* Horyzontalny układ prostokąta */
       align-items: center;
       justify-content: flex-start;
-      gap: 16px;
-      padding: 12px 20px;
+      gap: 12px;
+      padding: 10px 14px;
       cursor: pointer;
       position: relative;
       overflow: hidden;
@@ -818,9 +817,9 @@
 
     .about-tile-icon {
       flex-shrink: 0;
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -830,7 +829,7 @@
     }
 
     .about-tile-icon i {
-      font-size: 26px;
+      font-size: 20px;
     }
 
     /* Kolory ikon zgodnie z oryginalną paletą */
@@ -841,7 +840,7 @@
     .about-tile-5 .about-tile-icon i { color: #FF2D55; filter: drop-shadow(0 2px 6px rgba(255,45,85,0.4)); }
 
     .about-tile-label {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
       color: #1a3550;
       text-align: left;
@@ -1656,23 +1655,12 @@
         <h3>Historia i Patron</h3>
         
         <p><strong>Przynależność</strong><br>
-        Nasza parafia należy do dekanatu Radomsko – św. Lamberta w archidiecezji częstochowskiej.</p>
+        Dekanat Radomsko – św. Lamberta, Archidiecezja Częstochowska.</p>
 
         <p><strong>Rys historyczny</strong><br>
-        Parafia została utworzona w 1987 roku. Budowa samej świątyni trwała w latach 1988–1993, a jej uroczysta konsekracja miała miejsce w 1993 roku.</p>
-        
-        <p><strong>Św. Jan Chrzciciel</strong><br>
-        Prorok, który zapowiedział przyjście Mesjasza i ochrzcił Jezusa w wodach Jordanu. Jest patronem naszej parafii, wskazując nam drogę do pokuty i nawrócenia.</p>
-
-        <p><strong>Wspólnoty parafialne</strong><br>
-        Przy naszej parafii prężnie działają m.in.:</p>
-        <ul style="padding-left: 20px; margin-bottom: 10px;">
-          <li>Żywy Różaniec</li>
-          <li>Służba Liturgiczna</li>
-          <li>Akcja Katolicka</li>
-          <li>Zespół Charytatywny</li>
-          <li>oraz inne grupy duszpasterskie i modlitewne.</li>
-        </ul>
+        Erygowanie parafii: 1987 rok.<br>
+        Budowa kościoła: 1988–1993.<br>
+        Konsekracja świątyni: 1993 rok.</p>
       </div>
 
       <!-- WIDOK 4: Galeria -->
