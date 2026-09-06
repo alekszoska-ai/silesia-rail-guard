@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0f1e" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Aplikacja Parafii pw. św. Jana Chrzciciela w Radomsku" />
+  <title>Parafia pw. św. Jana Chrzciciela w Radomsku</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --font: 'Inter', sans-serif;
+      --header-h: 70px;
+      --nav-h: 76px;
+
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.22);
+      --glass-blur: blur(18px) saturate(180%);
+      --glass-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.25),
+        0 1px 0 rgba(255, 255, 255, 0.18) inset;
+      --glass-radius: 20px;
+
+      /* Kolory ikon kafelków */
+      --c1: #5eaeff;
+      /* niebieski   – aktualności  */
+      --c2: #66e09a;
+      /* zielony     – notatki      */
+      --c3: #f0c040;
+      /* złoty       – słowo/modl.  */
+      --c4: #b87fff;
+      /* fiolet      – o parafii    */
+      --c5: #ff7eb3;
+      /* różowy      – wspólnoty    */
+      --c6: #aee8ff;
+      /* błękitny    – cmentarz     */
+      --c7: #ffaa55;
+      /* pomarańcz   – pielgrzym    */
+      --c8: #80f0e0;
+      /* turkus      – asystent     */
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: var(--font);
+      background-image: url('./assets/images/PWA%20Radomsko1.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-color: #0d1525;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       SHELL
+    ============================================================ */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      max-width: 430px;
+      margin: 0 auto;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .app-shell::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg,
+          rgba(5, 10, 26, 0.60) 0%,
+          rgba(4, 8, 20, 0.68) 50%,
+          rgba(3, 6, 16, 0.75) 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       NAGŁÓWEK
+    ============================================================ */
+    .app-header {
+      flex-shrink: 0;
+      height: var(--header-h);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.20);
+    }
+
+    .app-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 8%;
+      right: 8%;
+      height: 1.5px;
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(220, 175, 60, 0.70) 25%,
+          rgba(255, 220, 80, 1.00) 50%,
+          rgba(220, 175, 60, 0.70) 75%,
+          transparent);
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .header-parish-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.95);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.40);
+    }
+
+    .header-date {
+      font-size: 10.5px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.52);
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .header-date-sep {
+      color: rgba(255, 215, 60, 0.65);
+      font-size: 9px;
+    }
+
+    .header-liturgy {
+      color: rgba(255, 215, 120, 0.80);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .header-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .header-avatar:active {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .header-avatar i {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .header-cross {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.14;
+      filter: drop-shadow(0 0 8px rgba(255, 210, 60, 0.80));
+    }
+
+    .header-cross i {
+      font-size: 22px;
+      color: #ffd040;
+    }
+
+    /* ============================================================
+       TREŚĆ GŁÓWNA
+    ============================================================ */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 18px 14px 10px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .main-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ============================================================
+       BANER POWITALNY
+    ============================================================ */
+    .welcome-banner {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--glass-radius);
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      top: -35px;
+      right: -20px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(100, 160, 255, 0.30) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .welcome-icon {
+      width: 46px;
+      height: 46px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .welcome-icon i {
+      font-size: 20px;
+      color: rgba(180, 215, 255, 0.95);
+    }
+
+    .welcome-text {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .welcome-text h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.40);
+    }
+
+    .welcome-quote {
+      font-size: 11.5px;
+      font-style: italic;
+      color: rgba(255, 230, 140, 0.88);
+      line-height: 1.50;
+      font-weight: 400;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    }
+
+    .welcome-quote cite {
+      display: block;
+      margin-top: 3px;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 600;
+      color: rgba(255, 210, 90, 0.70);
+      letter-spacing: 0.04em;
+    }
+
+    /* Ukryte elementy statusu Firebase – używane przez JS */
+    .firebase-status,
+    .status-dot,
+    .section-label {
+      display: none;
+    }
+
+    /* ============================================================
+       SIATKA KAFELKÓW – 2 kolumny
+    ============================================================ */
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    /* ============================================================
+       KAFELEK
+    ============================================================ */
+    .tile {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 20px;
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.28),
+        0 2px 8px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1 / 0.72;
+      transition:
+        transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.22s ease,
+        background 0.22s ease;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .tile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 45%;
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.16) 0%,
+          rgba(255, 255, 255, 0.00) 100%);
+      border-radius: 20px 20px 0 0;
+      pointer-events: none;
+    }
+
+    @media (hover: hover) {
+      .tile:hover {
+        transform: translateY(-5px) scale(1.03);
+        background: rgba(255, 255, 255, 0.22);
+        box-shadow:
+          0 14px 44px rgba(0, 0, 0, 0.35),
+          0 4px 12px rgba(0, 0, 0, 0.20),
+          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+    }
+
+    .tile:active {
+      transform: scale(0.94);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .tile-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ff2d55, #ff7090);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+      box-shadow: 0 2px 8px rgba(255, 45, 85, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      z-index: 3;
+    }
+
+    .tile-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.20);
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+
+    .tile-icon i {
+      font-size: 36px;
+    }
+
+    .tile-1 .tile-icon i {
+      color: var(--c1);
+      filter: drop-shadow(0 2px 8px rgba(94, 174, 255, 0.60));
+    }
+
+    .tile-2 .tile-icon i {
+      color: var(--c2);
+      filter: drop-shadow(0 2px 8px rgba(102, 224, 154, 0.60));
+    }
+
+    .tile-3 .tile-icon i {
+      color: var(--c3);
+      filter: drop-shadow(0 2px 8px rgba(240, 192, 64, 0.60));
+    }
+
+    .tile-4 .tile-icon i {
+      color: var(--c4);
+      filter: drop-shadow(0 2px 8px rgba(184, 127, 255, 0.60));
+    }
+
+    .tile-5 .tile-icon i {
+      color: var(--c5);
+      filter: drop-shadow(0 2px 8px rgba(255, 126, 179, 0.60));
+    }
+
+    .tile-6 .tile-icon i {
+      color: var(--c6);
+      filter: drop-shadow(0 2px 8px rgba(174, 232, 255, 0.60));
+    }
+
+    .tile-7 .tile-icon i {
+      color: var(--c7);
+      filter: drop-shadow(0 2px 8px rgba(255, 170, 85, 0.60));
+    }
+
+    .tile-8 .tile-icon i {
+      color: var(--c8);
+      filter: drop-shadow(0 2px 8px rgba(128, 240, 224, 0.60));
+    }
+
+    @media (hover: hover) {
+      .tile:hover .tile-icon {
+        transform: scale(1.10);
+      }
+    }
+
+    .tile:active .tile-icon {
+      transform: scale(0.88);
+    }
+
+    .tile-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.96);
+      text-align: center;
+      line-height: 1.20;
+      letter-spacing: 0.01em;
+      white-space: normal;
+      position: relative;
+      z-index: 1;
+      text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.55),
+        0 2px 10px rgba(0, 0, 0, 0.30);
+    }
+
+    @keyframes tile-in {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .tile {
+      animation: tile-in 0.50s cubic-bezier(0.22, 1.0, 0.36, 1) both;
+    }
+
+    .tile:nth-child(1) {
+      animation-delay: 0.06s;
+    }
+
+    .tile:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    .tile:nth-child(3) {
+      animation-delay: 0.18s;
+    }
+
+    .tile:nth-child(4) {
+      animation-delay: 0.24s;
+    }
+
+    .tile:nth-child(5) {
+      animation-delay: 0.30s;
+    }
+
+    .tile:nth-child(6) {
+      animation-delay: 0.36s;
+    }
+
+    .tile:nth-child(7) {
+      animation-delay: 0.42s;
+    }
+
+    .tile:nth-child(8) {
+      animation-delay: 0.48s;
+    }
+
+    /* ============================================================
+       DOLNA NAWIGACJA – 5 elementów
+    ============================================================ */
+    .bottom-nav {
+      flex-shrink: 0;
+      height: var(--nav-h);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid rgba(255, 255, 255, 0.20);
+      box-shadow:
+        0 -8px 32px rgba(0, 0, 0, 0.30),
+        inset 0 1px 0 rgba(255, 255, 255, 0.20);
+      display: flex;
+      align-items: stretch;
+      border-radius: 24px 24px 0 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      padding: 10px 4px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .nav-item:active {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-item i {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.40);
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .nav-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.40);
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-item.active i {
+      color: rgba(255, 255, 255, 0.96);
+      transform: translateY(-2px);
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.55));
+    }
+
+    .nav-item.active .nav-label {
+      color: rgba(255, 255, 255, 0.96);
+      font-weight: 700;
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 38px;
+      height: 3px;
+      border-radius: 0 0 4px 4px;
+      background: rgba(255, 255, 255, 0.90);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.70);
+    }
+
+    /* ============================================================
+       MODAL / SHEET
+    ============================================================ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 5, 14, 0.65);
+      backdrop-filter: blur(12px) saturate(120%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-sheet {
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-bottom: none;
+      border-radius: 28px 28px 0 0;
+      width: 100%;
+      max-width: 430px;
+      padding: 8px 24px 42px;
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.34, 1.20, 0.64, 1);
+      box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.40);
+    }
+
+    .modal-overlay.open .modal-sheet {
+      transform: translateY(0);
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.30);
+      margin: 14px auto 24px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.30);
+    }
+
+    .modal-body {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.65;
+    }
+
+    .modal-close-btn {
+      margin-top: 28px;
+      width: 100%;
+      padding: 16px;
+      border-radius: 18px;
+      border: none;
+      background: rgba(255, 255, 255, 0.20);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.30);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      transition: background 0.2s, transform 0.12s;
+    }
+
+    .modal-close-btn:active {
+      background: rgba(255, 255, 255, 0.28);
+      transform: scale(0.97);
+    }
+
+    /* ============================================================
+       MODUŁ AKTUALNOŚCI – pełnoekranowy modal
+    ============================================================ */
+    #news-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, rgba(30, 25, 45, 0.85), rgba(45, 35, 65, 0.75));
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
+
+    .news-symbols-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .news-symbols-bg i {
+      position: absolute;
+      color: rgba(255, 215, 100, 0.035);
+      filter: drop-shadow(0 0 20px rgba(255, 215, 100, 0.1));
+    }
+
+    .symbol-1 { top: 12%; left: -2%; font-size: 180px; transform: rotate(-15deg); }
+    .symbol-2 { bottom: -5%; right: -5%; font-size: 260px; transform: rotate(10deg); color: rgba(255, 215, 100, 0.025); }
+    .symbol-3 { top: 45%; right: 10%; font-size: 110px; transform: rotate(-10deg); }
+    .symbol-4 { bottom: 20%; left: 15%; font-size: 130px; transform: rotate(15deg); }
+    .symbol-5 { top: 8%; right: 25%; font-size: 90px; transform: rotate(5deg); }
+    .symbol-6 { top: 60%; left: -5%; font-size: 160px; transform: rotate(-5deg); }
+
+    .news-topbar, .news-tabs, .news-scroll {
+      position: relative;
+      z-index: 1;
+    }
+
+    #news-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(18px);
+    }
+
+    /* Górny pasek nawigacyjny */
+    .news-topbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      position: relative;
+    }
+
+    /* Złota linia dekoracyjna (spójna z nagłówkiem głównym) */
+    .news-topbar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 8%;
+      right: 8%;
+      height: 1.5px;
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(220, 175, 60, 0.70) 25%,
+          rgba(255, 220, 80, 1.00) 50%,
+          rgba(220, 175, 60, 0.70) 75%,
+          transparent);
+    }
+
+    .news-back-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+
+    .news-back-btn:active {
+      background: rgba(255, 255, 255, 0.22);
+      transform: scale(0.92);
+    }
+
+    .news-back-btn i {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.90);
+    }
+
+    .news-topbar-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.01em;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.40);
+    }
+
+    .news-topbar-badge {
+      margin-left: auto;
+      background: linear-gradient(135deg, #ff2d55, #ff7090);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.30);
+      box-shadow: 0 2px 8px rgba(255, 45, 85, 0.45);
+    }
+
+    /* Obszar przewijalny */
+    .news-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 18px 14px 24px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .news-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Subtelny znak wodny w tle przewijalnej listy */
+    .news-scroll::before {
+      content: '\f650'; /* fa-cross */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 350px;
+      color: rgba(255, 255, 255, 0.03);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Karta dnia */
+    .news-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      border: 1px solid rgba(255, 215, 0, 0.25);
+      border-radius: 18px;
+      padding: 18px 16px 14px;
+      margin-bottom: 14px;
+      box-shadow:
+        0 6px 24px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtelna refleksja na kartach */
+    .news-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 38%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, transparent 100%);
+      border-radius: 18px 18px 0 0;
+      pointer-events: none;
+    }
+
+    .news-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .news-card-date-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(220, 175, 60, 0.15);
+      border: 1px solid rgba(220, 175, 60, 0.30);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .news-card-date-icon i {
+      font-size: 18px;
+      color: #ffd040;
+    }
+
+    .news-card-date-info {
+      flex: 1;
+    }
+
+    .news-card-date {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.01em;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.30);
+    }
+
+    .news-card-liturgy {
+      font-size: 10.5px;
+      font-weight: 400;
+      color: rgba(255, 215, 120, 0.85);
+      font-style: italic;
+      margin-top: 1px;
+    }
+
+    /* Sekcja Mszy Świętych */
+    .news-masses-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 8px;
+    }
+
+    .news-mass-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .news-mass-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .news-mass-time {
+      flex-shrink: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #5eaeff;
+      background: rgba(94, 174, 255, 0.14);
+      border: 1px solid rgba(94, 174, 255, 0.25);
+      border-radius: 8px;
+      padding: 3px 9px;
+      min-width: 52px;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    .news-mass-intention {
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.50;
+      padding-top: 3px;
+    }
+
+    /* Separator */
+    .news-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.10);
+      margin: 14px 0;
+    }
+
+    /* Sekcja ogłoszeń */
+    .news-announcements-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 10px;
+    }
+
+    .news-announcement-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .news-announcement-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .news-ann-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 215, 80, 0.80);
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .news-ann-text {
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.55;
+    }
+
+    /* Zakładki (Tabs) w Aktualnościach */
+    .news-tabs {
+      display: flex;
+      gap: 10px;
+      padding: 10px 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
+    }
+    .news-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .news-tab-btn {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 6px 14px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font);
+    }
+    .news-tab-btn.active {
+      background: rgba(220, 175, 60, 0.25);
+      color: #ffd040;
+      border-color: rgba(220, 175, 60, 0.5);
+      box-shadow: 0 0 10px rgba(220, 175, 60, 0.2);
+    }
+
+    /* Pusty stan */
+    .news-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      text-align: center;
+      gap: 14px;
+    }
+
+    .news-empty i {
+      font-size: 48px;
+      color: rgba(255, 255, 255, 0.18);
+    }
+
+    .news-empty p {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.40);
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <!-- NAGŁÓWEK -->
+    <header class="app-header">
+      <div class="header-left">
+        <span class="header-parish-name" style="line-height: 1.2; padding-bottom: 2px;">Parafia św. Jana Chrzciciela<br><span style="font-size: 11px; font-weight: 500; opacity: 0.85;">w Radomsku</span></span>
+        <span class="header-date">
+          <span id="todayDate">Ładowanie daty…</span>
+          <span class="header-date-sep" id="liturgySep" style="display:none">•</span>
+          <span class="header-liturgy" id="liturgyDay"></span>
+        </span>
+      </div>
+      <div class="header-cross" aria-hidden="true">
+        <i class="fa-solid fa-cross"></i>
+      </div>
+      <div class="header-avatar" role="button" aria-label="Profil" id="profileBtn">
+        <i class="fa-solid fa-user"></i>
+      </div>
+    </header>
+
+    <!-- TREŚĆ GŁÓWNA -->
+    <main class="main-content" id="mainContent">
+
+      <!-- Baner powitalny -->
+      <div class="welcome-banner">
+        <div class="welcome-icon">
+          <i class="fa-solid fa-dove"></i>
+        </div>
+        <div class="welcome-text">
+          <h2>Szczęść Boże! 🙏</h2>
+          <p class="welcome-quote">
+            <span id="daily-quote">«Pan jest moim pasterzem, nie brak mi niczego»</span>
+            <cite id="daily-quote-source">(Ps 23, 1)</cite>
+          </p>
+        </div>
+        <!-- Ukryte elementy statusu Firebase – używane przez JS -->
+        <div class="firebase-status" aria-hidden="true">
+          <div class="status-dot" id="statusDot"></div>
+          <span id="statusText"></span>
+        </div>
+      </div>
+
+      <!-- Siatka kafelków -->
+      <div class="tiles-grid" id="tilesGrid">
+
+        <!-- 1. Aktualności parafialne -->
+        <div class="tile tile-1" role="button" tabindex="0" aria-label="Aktualności parafialne"
+          data-title="Aktualności parafialne"
+          data-body="Tutaj znajdziesz najnowsze ogłoszenia parafialne oraz intencje mszalne na bieżący tydzień.">
+          <div class="tile-badge" id="announcementBadge">3</div>
+          <div class="tile-icon"><i class="fa-solid fa-newspaper"></i></div>
+          <span class="tile-label">Aktualności parafialne</span>
+        </div>
+
+        <!-- 2. Notatki z kazania -->
+        <div class="tile tile-2" role="button" tabindex="0" aria-label="Notatki z kazania"
+          data-title="Notatki z kazania"
+          data-body="Zapisuj i przeglądaj swoje notatki z kazań. Synchronizacja z chmurą przez Firebase.">
+          <div class="tile-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+          <span class="tile-label">Notatki z kazania</span>
+        </div>
+
+        <!-- 3. Słowo i Modlitwa -->
+        <div class="tile tile-3" role="button" tabindex="0" aria-label="Słowo i Modlitwa" data-title="Słowo i Modlitwa"
+          data-body="Czytania liturgiczne, modlitwy brewiarzowe i rozważania duchowe na każdy dzień roku.">
+          <div class="tile-icon"><i class="fa-solid fa-hands-praying"></i></div>
+          <span class="tile-label">Słowo i Modlitwa</span>
+        </div>
+
+        <!-- 4. O Parafii -->
+        <div class="tile tile-4" role="button" tabindex="0" aria-label="O Parafii" data-title="O Parafii"
+          data-body="Parafia pw. św. Jana Chrzciciela (dekanat św. Lamberta, archidiecezja częstochowska). Adres: ul. Przemysłowa 34, 97-500 Radomsko. Tel. kontaktowy: [Wprowadź numer]. Znajdziesz tu również historię parafii oraz godziny otwarcia kancelarii.">
+          <div class="tile-icon"><i class="fa-solid fa-church"></i></div>
+          <span class="tile-label">O Parafii</span>
+        </div>
+
+        <!-- 5. Wspólnoty i Grupy -->
+        <div class="tile tile-5" role="button" tabindex="0" aria-label="Wspólnoty i Grupy"
+          data-title="Wspólnoty i Grupy"
+          data-body="Działające grupy duszpasterskie: Akcja Katolicka, Żywy Różaniec, Służba Liturgiczna, Zespół Charytatywny, Bractwo Miłosierdzia Bożego, Mali Rycerze Niepokalanej oraz Koło Misyjne. Dołącz do nas!">
+          <div class="tile-icon"><i class="fa-solid fa-users"></i></div>
+          <span class="tile-label">Wspólnoty i Grupy</span>
+        </div>
+
+        <!-- 6. Cmentarz -->
+        <div class="tile tile-6" role="button" tabindex="0" aria-label="Cmentarz" data-title="Cmentarz Parafialny"
+          data-body="Mapa cmentarza, wyszukiwarka pochowanych oraz informacje o administracji.">
+          <div class="tile-icon"><i class="fa-solid fa-cross"></i></div>
+          <span class="tile-label">Cmentarz</span>
+        </div>
+
+        <!-- 7. Strefa Pielgrzyma -->
+        <div class="tile tile-7" role="button" tabindex="0" aria-label="Strefa Pielgrzyma"
+          data-title="Strefa Pielgrzyma"
+          data-body="Informacje o pielgrzymkach, rekolekcjach i wyjazdach organizowanych przez parafię.">
+          <div class="tile-icon"><i class="fa-solid fa-person-hiking"></i></div>
+          <span class="tile-label">Strefa Pielgrzyma</span>
+        </div>
+
+        <!-- 8. Asystent Parafialny -->
+        <div class="tile tile-8" role="button" tabindex="0" aria-label="Asystent Parafialny"
+          data-title="Asystent Parafialny"
+          data-body="Inteligentny asystent AI odpowie na Twoje pytania dotyczące parafii, liturgii i życia duchowego.">
+          <div class="tile-icon"><i class="fa-solid fa-robot"></i></div>
+          <span class="tile-label">Asystent Parafialny</span>
+        </div>
+
+      </div><!-- /.tiles-grid -->
+    </main>
+
+    <!-- DOLNA NAWIGACJA -->
+    <nav class="bottom-nav" aria-label="Nawigacja główna">
+
+      <button class="nav-item active" id="nav-dom" aria-label="Dom" aria-current="page">
+        <i class="fa-solid fa-house"></i>
+        <span class="nav-label">Dom</span>
+      </button>
+
+      <button class="nav-item" id="nav-modlitwa" aria-label="Modlitwa">
+        <i class="fa-solid fa-hands-praying"></i>
+        <span class="nav-label">Modlitwa</span>
+      </button>
+
+      <button class="nav-item" id="nav-kalendarz" aria-label="Kalendarz">
+        <i class="fa-solid fa-calendar-alt"></i>
+        <span class="nav-label">Kalendarz</span>
+      </button>
+
+      <button class="nav-item" id="nav-wiadomosci" aria-label="Wiadomości">
+        <i class="fa-solid fa-envelope"></i>
+        <span class="nav-label">Wiadomości</span>
+      </button>
+
+      <button class="nav-item" id="nav-profil" aria-label="Profil">
+        <i class="fa-solid fa-user"></i>
+        <span class="nav-label">Profil</span>
+      </button>
+
+    </nav>
+  </div>
+
+  <!-- MODAL / SHEET -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-sheet">
+      <div class="modal-handle" aria-hidden="true"></div>
+      <h2 class="modal-title" id="modalTitle">Kafelek</h2>
+      <p class="modal-body" id="modalBody">Treść</p>
+      <button class="modal-close-btn" id="modalCloseBtn">Zamknij</button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: AKTUALNOŚCI PARAFIALNE ===== -->
+  <!-- UWAGA: Usunięto klasę 'modal-overlay', która powodowała całkowitą niewidzialność -->
+  <div id="news-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Aktualności parafialne">
+    <!-- Symbole chrześcijańskie w tle -->
+    <div class="news-symbols-bg" aria-hidden="true">
+      <i class="fa-solid fa-cross symbol-1"></i>
+      <i class="fa-solid fa-dove symbol-2"></i>
+      <i class="fa-solid fa-fish symbol-3"></i>
+      <i class="fa-solid fa-hands-praying symbol-4"></i>
+      <i class="fa-solid fa-church symbol-5"></i>
+      <i class="fa-solid fa-book-bible symbol-6"></i>
+    </div>
+
+    <!-- Górny pasek -->
+    <div class="news-topbar">
+      <div class="news-back-btn" id="newsBackBtn" role="button" aria-label="Zamknij aktualności">
+        <i class="fa-solid fa-arrow-left"></i>
+      </div>
+      <span class="news-topbar-title">Aktualności</span>
+      <span class="news-topbar-badge" id="newsBadgeCount"></span>
+    </div>
+
+    <!-- Zakładki -->
+    <div class="news-tabs">
+      <button class="news-tab-btn active" data-category="ogloszenia">Ogłoszenia</button>
+      <button class="news-tab-btn" data-category="intencje">Intencje</button>
+      <button class="news-tab-btn" data-category="nabozenstwa">Nabożeństwa obrzędowe</button>
+      <button class="news-tab-btn" data-category="koledy">Kolędy</button>
+    </div>
+
+    <!-- Lista ogłoszeń (przewijana) -->
+    <div class="news-scroll">
+      <div id="news-list"></div>
+    </div>
+  </div>
+
+  <!-- SKRYPTY APLIKACJI -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // --- 0. ZABICIE SERVICE WORKERA (aby wymusić odświeżenie cache'u) ---
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (let registration of registrations) {
+            registration.unregister();
+            console.log("Usunięto stary Service Worker");
+          }
+        });
+      }
+
+      // --- 1. SILNIK LITURGICZNY I CYTATY ---
+      const liturgicalQuotes = [
+        { text: "«Pan jest moim pasterzem, nie brak mi niczego»", siglum: "(Ps 23, 1)" },
+        { text: "«Proście, a będzie wam dane; szukajcie, a znajdziecie»", siglum: "(Mt 7, 7)" },
+        { text: "«Zostawili sieci i poszli za Nim»", siglum: "(Mk 1, 18)" },
+        { text: "«Nie bój się, wierz tylko!»", siglum: "(Mk 5, 36)" }
+      ];
+
+      function updateDailyQuote() {
+        const quoteEl = document.getElementById('daily-quote');
+        const sourceEl = document.getElementById('daily-quote-source');
+        if (quoteEl && sourceEl) {
+          const today = new Date();
+          const index = today.getDate() % liturgicalQuotes.length;
+          quoteEl.textContent = liturgicalQuotes[index].text;
+          sourceEl.textContent = liturgicalQuotes[index].siglum;
+        }
+      }
+      updateDailyQuote();
+
+      // --- 2. MODUŁ AKTUALNOŚCI ---
+      const mockNews = [
+        // --- 1. OGŁOSZENIA ---
+        {
+          date: "Niedziela, 06.09.2026",
+          title: "XXIII Niedziela Zwykła",
+          category: "ogloszenia",
+          announcements: [
+            "Kolekta z dzisiejszej niedzieli przeznaczona jest na bieżące utrzymanie naszej parafii pw. św. Jana Chrzciciela.",
+            "Kancelaria parafialna czynna jest po Mszach świętych wieczornych. W sprawach pilnych prosimy o kontakt pod nr telefonu: 44 682 13 56.",
+            "Spotkanie Akcji Katolickiej i Żywego Różańca odbędzie się w środę po mszy o godz. 17:00.",
+            "W przyszłą niedzielę zapraszamy na Mszę św. o godz. 12:00 z udziałem dzieci klas trzecich."
+          ]
+        },
+
+        // --- 2. INTENCJE MSZALNE ---
+        {
+          date: "Piątek, 04.09.2026",
+          title: "Pierwszy Piątek Miesiąca",
+          category: "intencje",
+          masses: [
+            "8:00 - Za dusze w czyśćcu cierpiące",
+            "17:00 - Wynagradzająca Najświętszemu Sercu Pana Jezusa"
+          ]
+        },
+        {
+          date: "Sobota, 05.09.2026",
+          title: "Pierwsza Sobota Miesiąca",
+          category: "intencje",
+          masses: [
+            "8:00 - Wynagradzająca Niepokalanemu Sercu Maryi",
+            "17:00 - W intencji nowożeńców"
+          ]
+        },
+        {
+          date: "Niedziela, 06.09.2026",
+          title: "XXIII Niedziela Zwykła",
+          category: "intencje",
+          masses: [
+            "8:00 - Za Parafian",
+            "10:00 - W intencji młodzieży z naszej parafii",
+            "12:00 - O Boże błogosławieństwo i zdrowie dla rodzin"
+          ]
+        },
+        {
+          date: "Poniedziałek, 07.09.2026",
+          title: "Dzień powszedni",
+          category: "intencje",
+          masses: [
+            "8:00 - Za śp. Jana i zmarłych z rodziny",
+            "17:00 - O łaskę zdrowia dla chorych parafian"
+          ]
+        },
+        {
+          date: "Wtorek, 08.09.2026",
+          title: "Święto Narodzenia NMP",
+          category: "intencje",
+          masses: [
+            "8:00 - O błogosławieństwo Boże za wstawiennictwem św. Jana Chrzciciela",
+            "17:00 - Za zmarłych kapłanów posługujących w naszej parafii"
+          ]
+        },
+        {
+          date: "Środa, 09.09.2026",
+          title: "Dzień powszedni",
+          category: "intencje",
+          masses: [
+            "8:00 - W intencji misji i misjonarzy",
+            "17:00 - Nowenna do Matki Bożej Nieustającej Pomocy i Msza św. zbiorowa"
+          ]
+        },
+
+        // --- 3. NABOŻEŃSTWA ---
+        {
+          date: "Porządek stały",
+          title: "Nabożeństwa w naszej Parafii",
+          category: "nabozenstwa",
+          announcements: [
+            "Msze Święte w niedziele i święta: 8:00, 10:00, 12:00.",
+            "Msze Święte w dni powszednie: 8:00, 17:00.",
+            "Spowiedź św. odbywa się 15 minut przed każdą Mszą Świętą.",
+            "Nabożeństwa majowe, czerwcowe i październikowe codziennie o godz. 16:30."
+          ]
+        },
+
+        // --- 4. KOLĘDY ---
+        {
+          date: "Wizyty Duszpasterskie",
+          title: "Informacje Kolędowe",
+          category: "koledy",
+          announcements: [
+            "Aktualnie nie odbywają się wizyty duszpasterskie.",
+            "Zgłoszenia nowych domostw do wizyty kolędowej prosimy kierować telefonicznie (44 682 13 56) do kancelarii."
+          ]
+        }
+      ];
+
+      let currentNewsCategory = 'ogloszenia';
+
+      function renderNews() {
+        const list = document.getElementById('news-list');
+        if (!list) return;
+
+        list.innerHTML = '';
+        
+        const filteredNews = mockNews.filter(news => news.category === currentNewsCategory);
+        
+        const badge = document.getElementById('newsBadgeCount');
+        if (badge) {
+          if (filteredNews.length === 0) {
+            badge.style.display = 'none';
+          } else {
+            badge.style.display = 'inline-block';
+            badge.textContent = filteredNews.length;
+          }
+        }
+        
+        if (filteredNews.length === 0) {
+          list.innerHTML = `
+            <div class="news-empty">
+              <i class="fa-solid fa-folder-open"></i>
+              <p>Brak ogłoszeń w tej kategorii.</p>
+            </div>
+          `;
+          return;
+        }
+
+        filteredNews.forEach(news => {
+          const card = document.createElement('div');
+          card.className = 'news-card';
+
+          const massesHTML = news.masses ? news.masses.map(m => `<div class="news-mass-time">${m}</div>`).join('') : '';
+          const announcementsHTML = news.announcements ? news.announcements.map(a => `<li style="margin-bottom: 8px;">${a}</li>`).join('') : '';
+
+          card.innerHTML = `
+            <div class="news-card-header">
+              <div class="news-card-date-icon">
+                <i class="fa-solid fa-cross"></i>
+              </div>
+              <div class="news-card-date-info">
+                <div class="news-card-date">${news.date}</div>
+                <div class="news-card-liturgy">${news.title}</div>
+              </div>
+            </div>
+            ${massesHTML ? `<div style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px;">${massesHTML}</div>` : ''}
+            ${announcementsHTML ? `<ul style="color:#e6f0fa; padding-left: 20px; line-height: 1.4; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">${announcementsHTML}</ul>` : ''}
+          `;
+          list.appendChild(card);
+        });
+      }
+
+      // Inicjalizacja zakładek
+      const tabBtns = document.querySelectorAll('.news-tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentNewsCategory = btn.getAttribute('data-category');
+          renderNews();
+        });
+      });
+
+      renderNews();
+
+      // Dynamiczny badge kafelka "Aktualności"
+      const mainTileBadge = document.getElementById('announcementBadge');
+      if (mainTileBadge) {
+        const totalAnnouncements = mockNews.filter(n => n.category === 'ogloszenia').length;
+        if (totalAnnouncements > 0) {
+          mainTileBadge.textContent = totalAnnouncements;
+          mainTileBadge.style.display = 'flex';
+        } else {
+          mainTileBadge.style.display = 'none';
+        }
+      }
+
+      // --- 3. OBSŁUGA KLIKNIĘĆ (MODAL AKTUALNOŚCI) ---
+      const newsTile = document.querySelector('.tile-1');
+      const newsModal = document.getElementById('news-modal');
+      const backBtn = document.getElementById('newsBackBtn');
+
+      if (newsTile && newsModal) {
+        newsTile.addEventListener('click', (e) => {
+          e.preventDefault();
+          newsModal.classList.remove('hidden');
+        });
+      }
+
+      if (backBtn && newsModal) {
+        backBtn.addEventListener('click', () => {
+          newsModal.classList.add('hidden');
+        });
+      }
+
+      // --- 4. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
+      const genericTiles = document.querySelectorAll('.tile:not(.tile-1)');
+      const genericModal = document.getElementById('modalOverlay');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalBody = document.getElementById('modalBody');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+      if (genericModal) {
+        genericTiles.forEach(tile => {
+          tile.addEventListener('click', () => {
+            modalTitle.textContent = tile.getAttribute('data-title');
+            modalBody.textContent = tile.getAttribute('data-body');
+            genericModal.classList.add('open');
+          });
+        });
+
+        if (modalCloseBtn) {
+          modalCloseBtn.addEventListener('click', () => {
+            genericModal.classList.remove('open');
+          });
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
