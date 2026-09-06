@@ -109,10 +109,10 @@
     .app-header {
       flex-shrink: 0;
       height: var(--header-h);
-      background: rgba(100, 180, 240, 0.75);
+      background: rgba(70, 170, 235, 0.85); /* Mocniejszy błękit */
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -199,12 +199,21 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      opacity: 0.20;
+      opacity: 0.95;
+      width: 44px;
+      height: 44px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.7), inset 0 0 6px rgba(255, 215, 100, 0.4);
+      border: 1px solid rgba(240, 220, 160, 0.5);
     }
 
     .header-cross i {
-      font-size: 22px;
-      color: #4bb3d0;
+      font-size: 20px;
+      color: #d4a32a; /* Złoty krzyż w hostii */
     }
 
     /* ============================================================
