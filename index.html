@@ -33,23 +33,23 @@
         0 1px 0 rgba(255, 255, 255, 0.85) inset;
       --glass-radius: 20px;
 
-      /* Kolory ikon kafelków – błękitno-turkusowa paleta */
-      --c1: #2e8bc0;
+      /* Kolory ikon kafelków – oryginalna zróżnicowana paleta */
+      --c1: #007AFF;
       /* niebieski   – aktualności  */
-      --c2: #36a2a0;
-      /* turkus      – notatki      */
-      --c3: #4bb3d0;
-      /* jasny błękit – słowo/modl. */
-      --c4: #1a6fa0;
-      /* ciemny błękit – o parafii  */
-      --c5: #5cc4c4;
-      /* seledynowy  – wspólnoty    */
-      --c6: #6dd4e0;
-      /* aqua        – cmentarz     */
-      --c7: #2090b0;
-      /* petrol      – pielgrzym    */
-      --c8: #40c8b8;
-      /* turkus      – asystent     */
+      --c2: #34C759;
+      /* zielony     – notatki      */
+      --c3: #FF9500;
+      /* pomarańczowy– słowo/modl.  */
+      --c4: #AF52DE;
+      /* fioletowy   – o parafii    */
+      --c5: #FF2D55;
+      /* różowy      – wspólnoty    */
+      --c6: #8E8E93;
+      /* szary       – cmentarz     */
+      --c7: #FFCC00;
+      /* żółty       – pielgrzym    */
+      --c8: #5856D6;
+      /* indygo      – asystent     */
     }
 
     /* ============================================================
@@ -229,8 +229,8 @@
       position: relative;
       overflow: hidden;
       border-radius: var(--glass-radius);
-      padding: 10px 14px;
-      margin-bottom: 10px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -319,7 +319,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 10px;
+      gap: 8px;
       flex: 1;
       height: 100%;
     }
@@ -340,8 +340,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      padding: 8px 6px;
+      gap: 3px;
+      padding: 6px;
       cursor: pointer;
       position: relative;
       overflow: hidden;
@@ -424,45 +424,14 @@
       font-size: 24px;
     }
 
-    .tile-1 .tile-icon i {
-      color: var(--c1);
-      filter: drop-shadow(0 2px 6px rgba(46, 139, 192, 0.40));
-    }
-
-    .tile-2 .tile-icon i {
-      color: var(--c2);
-      filter: drop-shadow(0 2px 6px rgba(54, 162, 160, 0.40));
-    }
-
-    .tile-3 .tile-icon i {
-      color: var(--c3);
-      filter: drop-shadow(0 2px 6px rgba(75, 179, 208, 0.40));
-    }
-
-    .tile-4 .tile-icon i {
-      color: var(--c4);
-      filter: drop-shadow(0 2px 6px rgba(26, 111, 160, 0.40));
-    }
-
-    .tile-5 .tile-icon i {
-      color: var(--c5);
-      filter: drop-shadow(0 2px 6px rgba(92, 196, 196, 0.40));
-    }
-
-    .tile-6 .tile-icon i {
-      color: var(--c6);
-      filter: drop-shadow(0 2px 6px rgba(109, 212, 224, 0.40));
-    }
-
-    .tile-7 .tile-icon i {
-      color: var(--c7);
-      filter: drop-shadow(0 2px 6px rgba(32, 144, 176, 0.40));
-    }
-
-    .tile-8 .tile-icon i {
-      color: var(--c8);
-      filter: drop-shadow(0 2px 6px rgba(64, 200, 184, 0.40));
-    }
+    .tile-1 .tile-icon i { color: var(--c1); filter: drop-shadow(0 2px 6px rgba(0, 122, 255, 0.40)); }
+    .tile-2 .tile-icon i { color: var(--c2); filter: drop-shadow(0 2px 6px rgba(52, 199, 89, 0.40)); }
+    .tile-3 .tile-icon i { color: var(--c3); filter: drop-shadow(0 2px 6px rgba(255, 149, 0, 0.40)); }
+    .tile-4 .tile-icon i { color: var(--c4); filter: drop-shadow(0 2px 6px rgba(175, 82, 222, 0.40)); }
+    .tile-5 .tile-icon i { color: var(--c5); filter: drop-shadow(0 2px 6px rgba(255, 45, 85, 0.40)); }
+    .tile-6 .tile-icon i { color: var(--c6); filter: drop-shadow(0 2px 6px rgba(142, 142, 147, 0.40)); }
+    .tile-7 .tile-icon i { color: var(--c7); filter: drop-shadow(0 2px 6px rgba(255, 204, 0, 0.40)); }
+    .tile-8 .tile-icon i { color: var(--c8); filter: drop-shadow(0 2px 6px rgba(88, 86, 214, 0.40)); }
 
     @media (hover: hover) {
       .tile:hover .tile-icon {
