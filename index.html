@@ -1273,7 +1273,17 @@
         });
       }
 
-      // --- 1. SILNIK LITURGICZNY I CYTATY ---
+      // --- 1. SILNIK LITURGICZNY, DATA I CYTATY ---
+      function updateHeaderDate() {
+        const dateEl = document.getElementById('todayDate');
+        if (dateEl) {
+          const options = { day: 'numeric', month: 'long', year: 'numeric' };
+          const todayString = new Date().toLocaleDateString('pl-PL', options);
+          dateEl.textContent = todayString;
+        }
+      }
+      updateHeaderDate();
+
       const liturgicalQuotes = [
         { text: "«Pan jest moim pasterzem, nie brak mi niczego»", siglum: "(Ps 23, 1)" },
         { text: "«Proście, a będzie wam dane; szukajcie, a znajdziecie»", siglum: "(Mt 7, 7)" },
