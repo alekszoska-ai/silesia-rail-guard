@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0f1e" />
+  <meta name="theme-color" content="#f0f4ff" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="description" content="Aplikacja Parafii pw. św. Jana Chrzciciela w Radomsku" />
   <title>Parafia pw. św. Jana Chrzciciela w Radomsku</title>
   <link rel="manifest" href="./manifest.json" />
@@ -25,12 +25,12 @@
       --header-h: 70px;
       --nav-h: 76px;
 
-      --glass-bg: rgba(255, 255, 255, 0.15);
-      --glass-border: rgba(255, 255, 255, 0.22);
-      --glass-blur: blur(18px) saturate(180%);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-blur: blur(20px) saturate(180%);
       --glass-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.25),
-        0 1px 0 rgba(255, 255, 255, 0.18) inset;
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        0 1px 0 rgba(255, 255, 255, 0.8) inset;
       --glass-radius: 20px;
 
       /* Kolory ikon kafelków */
@@ -72,8 +72,8 @@
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
-      background-color: #0d1525;
-      color: #fff;
+      background-color: #f5f7fa;
+      color: #2a3342;
       -webkit-font-smoothing: antialiased;
       overflow: hidden;
     }
@@ -96,9 +96,9 @@
       position: fixed;
       inset: 0;
       background: linear-gradient(180deg,
-          rgba(5, 10, 26, 0.60) 0%,
-          rgba(4, 8, 20, 0.68) 50%,
-          rgba(3, 6, 16, 0.75) 100%);
+          rgba(255, 255, 255, 0.85) 0%,
+          rgba(240, 248, 255, 0.90) 50%,
+          rgba(230, 240, 250, 0.95) 100%);
       z-index: -1;
       pointer-events: none;
     }
@@ -119,7 +119,7 @@
       padding: 0 20px;
       position: relative;
       z-index: 10;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.20);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
     }
 
     .app-header::after {
@@ -146,7 +146,7 @@
     .header-parish-name {
       font-size: 12px;
       font-weight: 800;
-      color: rgba(255, 255, 255, 0.95);
+      color: rgba(42, 51, 66, 0.95);
       letter-spacing: 0.05em;
       text-transform: uppercase;
       text-shadow: 0 1px 6px rgba(0, 0, 0, 0.40);
