@@ -678,6 +678,160 @@
     }
 
     /* ============================================================
+       MODUŁ O PARAFII – pełnoekranowy hub
+    ============================================================ */
+    #about-parish-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      background: rgba(232, 244, 252, 0.90);
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
+
+    #about-parish-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(18px);
+    }
+
+    .about-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('./assets/images/PWA%20Radomsko1.jpeg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .about-topbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      height: 70px;
+      background: rgba(100, 180, 240, 0.75);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-back-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a3550;
+      font-size: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .about-back-btn:active {
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .about-topbar-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1a3550;
+    }
+
+    .about-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .about-tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 12px;
+      flex: 1;
+      height: 100%;
+    }
+
+    /* Kancelaria na pełną szerokość */
+    .about-tile-1 {
+      grid-column: 1 / -1;
+    }
+
+    .about-tile {
+      background: rgba(45, 195, 160, 0.65);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.50);
+      border-radius: 18px;
+      box-shadow: 0 4px 16px rgba(100, 170, 220, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .about-tile:hover {
+      background: rgba(60, 215, 180, 0.85);
+    }
+
+    .about-tile:active {
+      transform: scale(0.95);
+    }
+
+    .about-tile-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 12px rgba(100, 170, 220, 0.15);
+    }
+
+    .about-tile-icon i {
+      font-size: 26px;
+    }
+
+    /* Kolory ikon zgodnie z oryginalną paletą */
+    .about-tile-1 .about-tile-icon i { color: #007AFF; filter: drop-shadow(0 2px 6px rgba(0,122,255,0.4)); }
+    .about-tile-2 .about-tile-icon i { color: #34C759; filter: drop-shadow(0 2px 6px rgba(52,199,89,0.4)); }
+    .about-tile-3 .about-tile-icon i { color: #FF9500; filter: drop-shadow(0 2px 6px rgba(255,149,0,0.4)); }
+    .about-tile-4 .about-tile-icon i { color: #AF52DE; filter: drop-shadow(0 2px 6px rgba(175,82,222,0.4)); }
+    .about-tile-5 .about-tile-icon i { color: #FF2D55; filter: drop-shadow(0 2px 6px rgba(255,45,85,0.4)); }
+
+    .about-tile-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1a3550;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    /* ============================================================
        MODUŁ AKTUALNOŚCI – pełnoekranowy modal
     ============================================================ */
     #news-modal {
@@ -1199,6 +1353,55 @@
     </div>
   </div>
 
+  <!-- ===== MODAL: O PARAFII ===== -->
+  <div id="about-parish-modal" class="hidden" role="dialog" aria-modal="true" aria-label="O Parafii">
+    <!-- Tło -->
+    <div class="about-bg"></div>
+
+    <!-- Górny pasek -->
+    <div class="about-topbar">
+      <div class="about-back-btn" id="aboutBackBtn" role="button" aria-label="Wróć">
+        <i class="fa-solid fa-arrow-left"></i>
+      </div>
+      <span class="about-topbar-title">O Parafii</span>
+    </div>
+
+    <!-- Kontener z kafelkami -->
+    <div class="about-content">
+      <div class="about-tiles-grid">
+        <!-- 1. Kancelaria Parafialna -->
+        <div class="about-tile about-tile-1" role="button" tabindex="0">
+          <div class="about-tile-icon"><i class="fa-regular fa-clock"></i></div>
+          <span class="about-tile-label">Kancelaria<br>Parafialna</span>
+        </div>
+
+        <!-- 2. Duszpasterze -->
+        <div class="about-tile about-tile-2" role="button" tabindex="0">
+          <div class="about-tile-icon"><i class="fa-solid fa-users"></i></div>
+          <span class="about-tile-label">Duszpasterze</span>
+        </div>
+
+        <!-- 3. Historia i Patron -->
+        <div class="about-tile about-tile-3" role="button" tabindex="0">
+          <div class="about-tile-icon"><i class="fa-solid fa-church"></i></div>
+          <span class="about-tile-label">Historia<br>i Patron</span>
+        </div>
+
+        <!-- 4. Galeria -->
+        <div class="about-tile about-tile-4" role="button" tabindex="0">
+          <div class="about-tile-icon"><i class="fa-solid fa-images"></i></div>
+          <span class="about-tile-label">Galeria<br>(Archiwum)</span>
+        </div>
+
+        <!-- 5. Wpłaty i Finanse -->
+        <div class="about-tile about-tile-5" role="button" tabindex="0">
+          <div class="about-tile-icon"><i class="fa-solid fa-wallet"></i></div>
+          <span class="about-tile-label">Wpłaty<br>i Finanse</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== MODAL: AKTUALNOŚCI PARAFIALNE ===== -->
   <!-- UWAGA: Usunięto klasę 'modal-overlay', która powodowała całkowitą niewidzialność -->
   <div id="news-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Aktualności parafialne">
@@ -1624,8 +1827,26 @@
         });
       }
 
-      // --- 4. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
-      const genericTiles = document.querySelectorAll('.tile:not(.tile-1)');
+      // --- 4. OBSŁUGA KLIKNIĘĆ (MODAL O PARAFII) ---
+      const aboutTile = document.querySelector('.tile-4');
+      const aboutModal = document.getElementById('about-parish-modal');
+      const aboutBackBtn = document.getElementById('aboutBackBtn');
+
+      if (aboutTile && aboutModal) {
+        aboutTile.addEventListener('click', (e) => {
+          e.preventDefault();
+          aboutModal.classList.remove('hidden');
+        });
+      }
+
+      if (aboutBackBtn && aboutModal) {
+        aboutBackBtn.addEventListener('click', () => {
+          aboutModal.classList.add('hidden');
+        });
+      }
+
+      // --- 5. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
+      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-4)');
       const genericModal = document.getElementById('modalOverlay');
       const modalTitle = document.getElementById('modalTitle');
       const modalBody = document.getElementById('modalBody');
