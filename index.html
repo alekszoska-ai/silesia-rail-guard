@@ -1006,37 +1006,30 @@
     }
 
     /* Galeria (Archiwum) */
+    .gallery-year-header {
+      margin: 15px 0 5px;
+      color: #1a3550;
+      font-size: 18px;
+    }
     .gallery-list {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      margin-top: 15px;
+      margin-top: 5px;
     }
     .gallery-card {
       display: flex;
-      background: rgba(255, 255, 255, 0.85);
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .gallery-card:active {
-      transform: scale(0.98);
-    }
-    .gallery-img {
-      width: 100px;
-      flex-shrink: 0;
-      background-color: #ddd;
-      background-position: center;
-      background-size: cover;
     }
     .gallery-content {
-      padding: 12px;
-      flex: 1;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
     .gallery-date {
       font-size: 11px;
@@ -1057,11 +1050,91 @@
       font-size: 13px;
       color: #444;
       line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      margin-bottom: 12px;
     }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 8px;
+    }
+    .gallery-thumb {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .gallery-thumb:active {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
+
+    /* Lightbox Styles */
+    #gallery-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    #gallery-lightbox.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 10000;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .lightbox-content-wrapper {
+      max-width: 100%;
+      max-height: 100%;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox-img {
+      max-width: 95vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .lightbox-prev, .lightbox-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .lightbox-prev { left: 10px; }
+    .lightbox-next { right: 10px; }
 
     /* ============================================================
        MODUŁ AKTUALNOŚCI – pełnoekranowy modal
@@ -1744,24 +1817,35 @@
       <div class="about-detail-view" id="about-view-4">
         <h3>Galeria (Archiwum)</h3>
         
+        <h4 class="gallery-year-header">Rok 2026</h4>
         <div class="gallery-list">
-          <!-- Wpis 1 -->
           <div class="gallery-card">
-            <div class="gallery-img" style="background-image: url('assets/images/PWA Radomsko1.jpeg');"></div>
             <div class="gallery-content">
-              <div class="gallery-date">2 lipca</div>
-              <div class="gallery-title">Peregrynacja Obrazu Matki Bożej</div>
-              <div class="gallery-text">Uroczyste powitanie i modlitwa przy nawiedzającym naszą parafialną wspólnotę wizerunku Matki Bożej. Mieszkańcy zgromadzili się by wspólnie uczestniczyć w tej wyjątkowej chwili.</div>
+              <div class="gallery-date">marzec 2026</div>
+              <div class="gallery-title">Kiermasz Wielkanocny i Niedziela Palmowa</div>
+              <div class="gallery-text">Fotorelacja z kiermaszu, tradycyjnych palm oraz udziału lokalnej społeczności. Wspólne spotkanie, kiermasz i integracja naszej społeczności parafialnej.</div>
+              <div class="gallery-grid">
+                <img class="gallery-thumb" src="https://placehold.co/600x400/1a3550/eeeeee?text=Kiermasz+1" alt="Kiermasz 1">
+                <img class="gallery-thumb" src="https://placehold.co/600x400/1a3550/eeeeee?text=Kiermasz+2" alt="Kiermasz 2">
+                <img class="gallery-thumb" src="https://placehold.co/600x400/1a3550/eeeeee?text=Kiermasz+3" alt="Kiermasz 3">
+              </div>
             </div>
           </div>
-          
-          <!-- Wpis 2 -->
+        </div>
+
+        <h4 class="gallery-year-header">Rok 2024</h4>
+        <div class="gallery-list">
           <div class="gallery-card">
-            <div class="gallery-img" style="background-image: url('https://placehold.co/400x400/1a3550/eeeeee?text=Kiermasz');"></div>
             <div class="gallery-content">
-              <div class="gallery-date">Wydarzenie parafialne</div>
-              <div class="gallery-title">Kiermasz Parafialny</div>
-              <div class="gallery-text">Wspólne spotkanie, kiermasz i integracja naszej społeczności parafialnej. Dziękujemy wszystkim za przybycie i udział.</div>
+              <div class="gallery-date">2 lipca 2024</div>
+              <div class="gallery-title">Peregrynacja Obrazu Matki Bożej</div>
+              <div class="gallery-text">Fotorelacja z uroczystego nawiedzenia parafii na Bogwidzowach przez kopię Cudownego Obrazu. Uroczyste powitanie i modlitwa. Mieszkańcy zgromadzili się by wspólnie uczestniczyć w tej wyjątkowej chwili. Źródło: SpotRadomsko</div>
+              <div class="gallery-grid">
+                <img class="gallery-thumb" src="assets/images/PWA Radomsko1.jpeg" alt="Peregrynacja 1">
+                <img class="gallery-thumb" src="https://placehold.co/600x400/1a3550/eeeeee?text=Peregrynacja+2" alt="Peregrynacja 2">
+                <img class="gallery-thumb" src="https://placehold.co/600x400/1a3550/eeeeee?text=Peregrynacja+3" alt="Peregrynacja 3">
+                <img class="gallery-thumb" src="https://placehold.co/600x400/1a3550/eeeeee?text=Peregrynacja+4" alt="Peregrynacja 4">
+              </div>
             </div>
           </div>
         </div>
@@ -1823,6 +1907,16 @@
     <div class="news-scroll">
       <div id="news-list"></div>
     </div>
+  </div>
+
+  <!-- LIGHTBOX DO GALERII -->
+  <div id="gallery-lightbox" class="hidden" role="dialog" aria-modal="true" aria-label="Podgląd zdjęcia">
+    <div class="lightbox-close" id="lightbox-close-btn" aria-label="Zamknij podgląd"><i class="fa-solid fa-times"></i></div>
+    <div class="lightbox-content-wrapper">
+      <img id="lightbox-img" src="" alt="Powiększone zdjęcie">
+    </div>
+    <div class="lightbox-prev" id="lightbox-prev-btn" aria-label="Poprzednie zdjęcie"><i class="fa-solid fa-chevron-left"></i></div>
+    <div class="lightbox-next" id="lightbox-next-btn" aria-label="Następne zdjęcie"><i class="fa-solid fa-chevron-right"></i></div>
   </div>
 
   <!-- SKRYPTY APLIKACJI -->
@@ -2304,6 +2398,76 @@
           modalCloseBtn.addEventListener('click', () => {
             genericModal.classList.remove('open');
           });
+        }
+      }
+
+      // --- 10. LIGHTBOX GALERII ---
+      const lightbox = document.getElementById('gallery-lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxClose = document.getElementById('lightbox-close-btn');
+      const lightboxPrev = document.getElementById('lightbox-prev-btn');
+      const lightboxNext = document.getElementById('lightbox-next-btn');
+      
+      let currentGalleryImages = [];
+      let currentImageIndex = 0;
+
+      document.querySelectorAll('.gallery-grid').forEach(grid => {
+        const thumbs = Array.from(grid.querySelectorAll('.gallery-thumb'));
+        thumbs.forEach((thumb, index) => {
+          thumb.addEventListener('click', () => {
+            currentGalleryImages = thumbs.map(t => t.src);
+            currentImageIndex = index;
+            updateLightboxImage();
+            lightbox.classList.remove('hidden');
+          });
+        });
+      });
+
+      function updateLightboxImage() {
+        if (currentGalleryImages.length > 0) {
+          lightboxImg.src = currentGalleryImages[currentImageIndex];
+        }
+      }
+
+      lightboxClose.addEventListener('click', () => {
+        lightbox.classList.add('hidden');
+      });
+
+      lightboxPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentGalleryImages.length > 0) {
+          currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+          updateLightboxImage();
+        }
+      });
+
+      lightboxNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentGalleryImages.length > 0) {
+          currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
+          updateLightboxImage();
+        }
+      });
+
+      // Swipe support for lightbox
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      lightbox.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+      
+      lightbox.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+      
+      function handleSwipe() {
+        if (touchEndX < touchStartX - 30) {
+          lightboxNext.click();
+        }
+        if (touchEndX > touchStartX + 30) {
+          lightboxPrev.click();
         }
       }
     });
