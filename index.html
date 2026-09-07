@@ -1005,6 +1005,118 @@
       word-break: break-all;
     }
 
+    /* ============================================================
+       MODUŁ SŁOWO I MODLITWA
+    ============================================================ */
+    #prayers-modal {
+      position: fixed; inset: 0; z-index: 300; display: flex; flex-direction: column;
+      background: linear-gradient(160deg, #0a1628 0%, #12224a 45%, #0d1b3e 100%);
+      overflow: hidden;
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #prayers-modal.hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+    .pm-bg-symbols { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .pm-sym { position: absolute; color: rgba(160,200,255,0.04); }
+    .pm-sym-1 { top: 5%; left: -5%; font-size: 220px; transform: rotate(-20deg); }
+    .pm-sym-2 { bottom: 5%; right: -8%; font-size: 280px; transform: rotate(12deg); }
+    .pm-sym-3 { top: 38%; left: 55%; font-size: 140px; transform: rotate(-8deg); }
+    .pm-sym-4 { top: 68%; left: 5%; font-size: 160px; transform: rotate(10deg); }
+    #pm-dashboard, .pm-subview { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+    .pm-topbar {
+      display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 68px; flex-shrink: 0;
+      background: rgba(8,18,45,0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(100,150,255,0.18);
+    }
+    .pm-back-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(80,130,255,0.15); border: 1.5px solid rgba(100,160,255,0.3);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      flex-shrink: 0; color: rgba(200,220,255,0.9); font-size: 15px; transition: background 0.2s;
+    }
+    .pm-back-btn:active { background: rgba(80,130,255,0.35); }
+    .pm-topbar-info { flex: 1; }
+    .pm-topbar-title { display: block; font-size: 17px; font-weight: 800; color: #fff; }
+    .pm-topbar-date { display: block; font-size: 11px; color: rgba(180,210,255,0.7); margin-top: 1px; text-transform: capitalize; }
+    .pm-liturgy-banner {
+      margin: 14px 16px 4px; padding: 9px 16px;
+      background: rgba(255,210,80,0.10); border: 1px solid rgba(255,210,80,0.22);
+      border-radius: 10px; font-size: 12px; font-weight: 700;
+      color: rgba(255,215,120,0.9); text-align: center; letter-spacing: 0.06em;
+    }
+    .pm-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px 16px 32px; scrollbar-width: none; }
+    .pm-scroll::-webkit-scrollbar { display: none; }
+    .pm-tiles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+    .pm-tile {
+      border-radius: 18px; padding: 20px 14px 18px; display: flex; flex-direction: column;
+      align-items: center; gap: 10px; cursor: pointer; transition: transform 0.18s;
+      overflow: hidden; border: 1px solid rgba(255,255,255,0.10);
+    }
+    .pm-tile:active { transform: scale(0.96); }
+    .pm-tile-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+    .pm-tile-label { font-size: 15px; font-weight: 800; color: #fff; text-align: center; line-height: 1.2; }
+    .pm-tile-sub { font-size: 11px; color: rgba(255,255,255,0.6); text-align: center; }
+    .pm-tile-gold { background: linear-gradient(145deg,rgba(180,120,10,0.55),rgba(210,160,30,0.35)); box-shadow: 0 8px 24px rgba(200,140,20,0.25); }
+    .pm-tile-gold .pm-tile-icon { background: rgba(255,200,60,0.20); color: #ffcc30; }
+    .pm-tile-purple { background: linear-gradient(145deg,rgba(100,40,160,0.55),rgba(130,60,200,0.35)); box-shadow: 0 8px 24px rgba(100,40,160,0.25); }
+    .pm-tile-purple .pm-tile-icon { background: rgba(160,80,255,0.20); color: #c380ff; }
+    .pm-tile-green { background: linear-gradient(145deg,rgba(20,100,60,0.55),rgba(30,140,80,0.35)); box-shadow: 0 8px 24px rgba(20,120,60,0.25); }
+    .pm-tile-green .pm-tile-icon { background: rgba(60,200,120,0.20); color: #5de8a0; }
+    .pm-tile-blue { background: linear-gradient(145deg,rgba(20,70,160,0.55),rgba(30,100,210,0.35)); box-shadow: 0 8px 24px rgba(20,70,180,0.25); }
+    .pm-tile-blue .pm-tile-icon { background: rgba(60,130,255,0.20); color: #7ab8ff; }
+    .pm-section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(160,200,255,0.7); margin: 18px 0 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .pm-reading-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(100,150,255,0.18); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+    .pm-reading-gospel { border-color: rgba(255,200,60,0.25); background: rgba(255,200,60,0.05); }
+    .pm-reading-comment { border-color: rgba(160,80,255,0.25); background: rgba(160,80,255,0.05); }
+    .pm-reading-ref { font-size: 11px; font-weight: 700; color: rgba(255,215,120,0.8); margin-bottom: 10px; letter-spacing: 0.04em; }
+    .pm-reading-text { font-size: 15px; line-height: 1.75; color: rgba(220,235,255,0.92); margin-bottom: 10px; }
+    .pm-reading-text:last-child { margin-bottom: 0; }
+    .pm-hymn-title { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(180,210,255,0.65); margin-bottom: 8px; }
+    .pm-prayer-center { text-align: center; font-style: italic; }
+    .pm-intentions-intro { font-size: 13px; color: rgba(180,210,255,0.65); text-align: center; line-height: 1.5; margin-bottom: 16px; }
+    .pm-intention-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(100,150,255,0.18); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+    .pm-intention-text { font-size: 15px; line-height: 1.65; color: rgba(220,235,255,0.92); margin-bottom: 12px; }
+    .pm-pray-btn {
+      display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px;
+      border: 1.5px solid rgba(80,130,255,0.45); background: rgba(50,100,200,0.18);
+      color: rgba(160,210,255,0.95); font-size: 14px; font-weight: 700; font-family: var(--font);
+      cursor: pointer; transition: background 0.2s, transform 0.15s; width: 100%; justify-content: center;
+    }
+    .pm-pray-btn:active { transform: scale(0.97); }
+    .pm-pray-btn--active { background: rgba(60,120,255,0.4); border-color: rgba(100,160,255,0.7); color: #fff; cursor: default; }
+    .pm-pray-count { background: rgba(255,255,255,0.15); border-radius: 6px; padding: 2px 7px; font-size: 13px; margin-left: auto; }
+    .pm-add-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(60,200,120,0.25); border: 1.5px solid rgba(60,200,120,0.5);
+      color: #5de8a0; font-size: 17px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; transition: background 0.2s;
+    }
+    .pm-add-btn:active { background: rgba(60,200,120,0.45); }
+    .pm-intention-form {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: #0d1f45; border-top: 1px solid rgba(100,150,255,0.25);
+      border-radius: 20px 20px 0 0; padding: 20px 16px 32px; z-index: 10;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
+    }
+    .pm-intention-form.hidden { display: none; }
+    .pm-form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 15px; font-weight: 700; color: #fff; }
+    .pm-form-close { background: none; border: none; color: rgba(180,210,255,0.7); font-size: 18px; cursor: pointer; padding: 4px 8px; }
+    .pm-form-textarea {
+      width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(100,150,255,0.3);
+      border-radius: 12px; padding: 12px; font-size: 15px; line-height: 1.6;
+      color: rgba(220,235,255,0.92); font-family: var(--font); resize: none;
+    }
+    .pm-form-textarea::placeholder { color: rgba(160,200,255,0.4); }
+    .pm-form-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+    .pm-char-count { font-size: 12px; color: rgba(160,200,255,0.5); }
+    .pm-form-submit {
+      padding: 11px 22px; background: linear-gradient(135deg,#3a78ff,#6040e0);
+      border: none; border-radius: 11px; color: #fff; font-size: 14px; font-weight: 700;
+      font-family: var(--font); cursor: pointer; box-shadow: 0 4px 14px rgba(60,100,255,0.45);
+    }
+
     /* Galeria (Archiwum) */
     .gallery-year-header {
       margin: 15px 0 5px;
@@ -1570,8 +1682,7 @@
         </div>
 
         <!-- 3. Słowo i Modlitwa -->
-        <div class="tile tile-3" role="button" tabindex="0" aria-label="Słowo i Modlitwa" data-title="Słowo i Modlitwa"
-          data-body="Czytania liturgiczne, modlitwy brewiarzowe i rozważania duchowe na każdy dzień roku.">
+        <div class="tile tile-3" id="tile-prayers" role="button" tabindex="0" aria-label="Słowo i Modlitwa">
           <div class="tile-icon"><i class="fa-solid fa-hands-praying"></i></div>
           <span class="tile-label">Słowo i Modlitwa</span>
         </div>
@@ -1918,6 +2029,170 @@
     <div class="lightbox-prev" id="lightbox-prev-btn" aria-label="Poprzednie zdjęcie"><i class="fa-solid fa-chevron-left"></i></div>
     <div class="lightbox-next" id="lightbox-next-btn" aria-label="Następne zdjęcie"><i class="fa-solid fa-chevron-right"></i></div>
   </div>
+
+
+  <!-- ===== MODAL: SŁOWO I MODLITWA ===== -->
+  <div id="prayers-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Słowo i Modlitwa">
+
+    <div class="pm-bg-symbols" aria-hidden="true">
+      <i class="fa-solid fa-cross pm-sym pm-sym-1"></i>
+      <i class="fa-solid fa-dove pm-sym pm-sym-2"></i>
+      <i class="fa-solid fa-wheat-awn pm-sym pm-sym-3"></i>
+      <i class="fa-solid fa-hands-praying pm-sym pm-sym-4"></i>
+    </div>
+
+    <!-- POZIOM 1: PULPIT -->
+    <div id="pm-dashboard">
+      <div class="pm-topbar">
+        <div class="pm-back-btn" id="pmCloseBtn" role="button" aria-label="Zamknij moduł"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info">
+          <span class="pm-topbar-title">Słowo i Modlitwa</span>
+          <span class="pm-topbar-date" id="pmDate"></span>
+        </div>
+      </div>
+      <div class="pm-scroll">
+        <div class="pm-liturgy-banner" id="pmLiturgyBanner"></div>
+        <div class="pm-tiles-grid">
+          <div class="pm-tile pm-tile-gold" id="pmTile1" role="button" tabindex="0">
+            <div class="pm-tile-icon"><i class="fa-solid fa-book-open"></i></div>
+            <span class="pm-tile-label">Słowo na dziś</span>
+            <span class="pm-tile-sub">Ewangelia i komentarz</span>
+          </div>
+          <div class="pm-tile pm-tile-purple" id="pmTile2" role="button" tabindex="0">
+            <div class="pm-tile-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <span class="pm-tile-label">Liturgia Godzin</span>
+            <span class="pm-tile-sub">Jutrznia · Nieszpory</span>
+          </div>
+          <div class="pm-tile pm-tile-green" id="pmTile3" role="button" tabindex="0">
+            <div class="pm-tile-icon"><i class="fa-solid fa-circle-dot"></i></div>
+            <span class="pm-tile-label">Skarbiec Modlitw</span>
+            <span class="pm-tile-sub">Różaniec · Koronka</span>
+          </div>
+          <div class="pm-tile pm-tile-blue" id="pmTile4" role="button" tabindex="0">
+            <div class="pm-tile-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            <span class="pm-tile-label">Ściana Intencji</span>
+            <span class="pm-tile-sub">Wspólna modlitwa</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PODSTRONA 1: Słowo na dziś -->
+    <div id="pm-view-1" class="pm-subview hidden">
+      <div class="pm-topbar">
+        <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info">
+          <span class="pm-topbar-title">Słowo na dziś</span>
+          <span class="pm-topbar-date" id="pmDate1"></span>
+        </div>
+      </div>
+      <div class="pm-scroll">
+        <div class="pm-section-label"><i class="fa-solid fa-bookmark"></i> Ewangelia</div>
+        <div class="pm-reading-box pm-reading-gospel">
+          <div class="pm-reading-ref">J 6, 60–69 · Niedziela, rok B</div>
+          <p class="pm-reading-text">Wielu więc spośród Jego uczniów, którzy to usłyszeli, mówiło: «Trudna jest ta mowa. Któż jej może słuchać?» Jezus jednak świadom tego, że uczniowie Jego na to szemrali, rzekł do nich: «To was gorszy? A gdy ujrzycie Syna Człowieczego, jak będzie wstępował tam, gdzie był przedtem?»</p>
+          <p class="pm-reading-text">«Duch daje życie; ciało na nic się nie przyda. Słowa, które Ja wam powiedziałem, są duchem i są życiem.»</p>
+          <p class="pm-reading-text">Rzekł więc Jezus do Dwunastu: «Czyż i wy chcecie odejść?» Odpowiedział Mu Szymon Piotr: «Panie, do kogóż pójdziemy? Ty masz słowa życia wiecznego. A myśmy uwierzyli i poznali, że Ty jesteś Świętym Boga.»</p>
+        </div>
+        <div class="pm-section-label"><i class="fa-solid fa-lightbulb"></i> Komentarz duchowy</div>
+        <div class="pm-reading-box pm-reading-comment">
+          <p class="pm-reading-text">Słowa Piotra brzmią dziś jak osobiste wyznanie każdego z nas: <em>«Panie, do kogóż pójdziemy?»</em> W chwilach zwątpienia, zmęczenia wiarą czy codziennych trudności – ta prosta odpowiedź ucznia jest naszą kotwicą. Nie musimy rozumieć wszystkiego. Wystarczy trwać.</p>
+          <p class="pm-reading-text">Pozwól, by dziś to pytanie towarzyszyło Ci jak modlitwa: <em>«Panie, Ty masz słowa życia – zostań ze mną.»</em></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PODSTRONA 2: Liturgia Godzin -->
+    <div id="pm-view-2" class="pm-subview hidden">
+      <div class="pm-topbar">
+        <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info">
+          <span class="pm-topbar-title">Liturgia Godzin</span>
+          <span class="pm-topbar-date" id="pmDate2"></span>
+        </div>
+      </div>
+      <div class="pm-scroll">
+        <div class="pm-section-label"><i class="fa-solid fa-sun"></i> Jutrznia (Laudes)</div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Otwarcie</p>
+          <p class="pm-reading-text pm-prayer-center">℣ Boże, wejrzyj ku wspomożeniu memu.<br>℟ Panie, pospiesz ku ratunkowi memu.<br><br>Chwała Ojcu i Synowi, i Duchowi Świętemu,<br>jak była na początku, teraz i zawsze,<br>i na wieki wieków. Amen.</p>
+        </div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Modlitwa poranna</p>
+          <p class="pm-reading-text">Panie, nasz Boże, dzięki Ci składamy za ten nowy dzień. Niech każda chwila będzie okazją do czynienia dobra i zbliżania się do Ciebie. Daj nam mądrość i siłę, byśmy wypełniali Twoją wolę. Przez Chrystusa, Pana naszego. Amen.</p>
+        </div>
+        <div class="pm-section-label" style="margin-top:20px"><i class="fa-solid fa-moon"></i> Nieszpory (Vesperae)</div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Magnificat (Łk 1, 46–55)</p>
+          <p class="pm-reading-text pm-prayer-center">Wielbi dusza moja Pana<br>i raduje się duch mój w Bogu, moim Zbawcy.<br>Bo wejrzał na uniżenie Służebnicy swojej.<br><br>Oto bowiem błogosławić mnie będą<br>odtąd wszystkie pokolenia,<br>gdyż wielkie rzeczy uczynił mi Wszechmocny.<br><br>Święte jest Jego imię,<br>a swoje miłosierdzie na pokolenia i pokolenia<br>zachowuje dla tych, co się Go boją.</p>
+        </div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Modlitwa wieczorna</p>
+          <p class="pm-reading-text">Wszechmogący Boże, gdy kończy się ten dzień, powierzamy Ci wszystkie nasze sprawy. Za dobro – dziękujemy. Za zło i słabości – przepraszamy. Otocz nas swoją opieką tej nocy. Amen.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PODSTRONA 3: Skarbiec Modlitw -->
+    <div id="pm-view-3" class="pm-subview hidden">
+      <div class="pm-topbar">
+        <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info"><span class="pm-topbar-title">Skarbiec Modlitw</span></div>
+      </div>
+      <div class="pm-scroll">
+        <div class="pm-section-label"><i class="fa-solid fa-circle-dot"></i> Różaniec Święty</div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Wyznanie wiary (Skład Apostolski)</p>
+          <p class="pm-reading-text">Wierzę w Boga, Ojca wszechmogącego, Stworzyciela nieba i ziemi, i w Jezusa Chrystusa, Syna Jego jedynego, Pana naszego, który się począł z Ducha Świętego, narodził się z Maryi Panny, umęczon pod Ponckim Piłatem, ukrzyżowan, umarł i pogrzebion, zstąpił do piekieł, trzeciego dnia zmartwychwstał, wstąpił na niebiosa, siedzi po prawicy Boga Ojca wszechmogącego, stamtąd przyjdzie sądzić żywych i umarłych. Wierzę w Ducha Świętego, Święty Kościół powszechny, Świętych obcowanie, grzechów odpuszczenie, ciała zmartwychwstanie, żywot wieczny. Amen.</p>
+        </div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Tajemnice niedzielne — chwalebne</p>
+          <p class="pm-reading-text">I. Zmartwychwstanie Pana Jezusa<br>II. Wniebowstąpienie Pana Jezusa<br>III. Zesłanie Ducha Świętego<br>IV. Wniebowzięcie Najświętszej Maryi Panny<br>V. Ukoronowanie NMP w niebie</p>
+        </div>
+        <div class="pm-section-label" style="margin-top:18px"><i class="fa-solid fa-heart"></i> Koronka do Miłosierdzia Bożego</div>
+        <div class="pm-reading-box">
+          <p class="pm-reading-text">Na początku: Ojcze nasz... Zdrowaś Maryjo... Wierzę w Boga...<br><br>Na paciorku większym: <em>«Ojcze Przedwieczny, ofiaruję Ci Ciało i Krew, Duszę i Bóstwo najmilszego Syna Twojego, na przebłaganie za grzechy nasze i świata całego.»</em><br><br>Na paciorku mniejszym (10 razy): <em>«Dla Jego bolesnej Męki, miej miłosierdzie dla nas i całego świata.»</em><br><br>Na zakończenie (3 razy): <em>«Święty Boże, Święty Mocny, Święty Nieśmiertelny – zmiłuj się nad nami i nad całym światem.»</em></p>
+        </div>
+        <div class="pm-section-label" style="margin-top:18px"><i class="fa-solid fa-star"></i> Modlitwy codzienne</div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Ojcze nasz</p>
+          <p class="pm-reading-text pm-prayer-center">Ojcze nasz, któryś jest w niebie,<br>święć się imię Twoje;<br>przyjdź królestwo Twoje;<br>bądź wola Twoja jako w niebie, tak i na ziemi.<br>Chleba naszego powszedniego daj nam dzisiaj;<br>i odpuść nam nasze winy,<br>jako i my odpuszczamy naszym winowajcom;<br>i nie wódź nas na pokuszenie,<br>ale nas zbaw ode złego. Amen.</p>
+        </div>
+        <div class="pm-reading-box">
+          <p class="pm-hymn-title">Zdrowaś Maryjo</p>
+          <p class="pm-reading-text pm-prayer-center">Zdrowaś Maryjo, łaski pełna,<br>Pan z Tobą,<br>błogosławionaś Ty między niewiastami<br>i błogosławiony owoc żywota Twojego, Jezus.<br><br>Święta Maryjo, Matko Boża,<br>módl się za nami grzesznymi,<br>teraz i w godzinę śmierci naszej. Amen.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PODSTRONA 4: Ściana Intencji -->
+    <div id="pm-view-4" class="pm-subview hidden">
+      <div class="pm-topbar">
+        <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info">
+          <span class="pm-topbar-title">Ściana Intencji</span>
+          <span class="pm-topbar-date">Wspólna modlitwa parafian</span>
+        </div>
+        <button class="pm-add-btn" id="pmAddIntentionBtn" aria-label="Dodaj intencję"><i class="fa-solid fa-plus"></i></button>
+      </div>
+      <div class="pm-scroll">
+        <p class="pm-intentions-intro">Każda prośba jest anonimowa. Kliknij „Podejmuję modlitwę", aby dołączyć do wspólnej modlitwy w tej intencji.</p>
+        <div id="pm-intentions-list"></div>
+      </div>
+      <div id="pm-intention-form" class="pm-intention-form hidden">
+        <div class="pm-form-header">
+          <span>Nowa intencja</span>
+          <button class="pm-form-close" id="pmFormClose"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <textarea id="pmIntentionText" class="pm-form-textarea" placeholder="Wpisz swoją intencję modlitewną... (prośba pozostaje anonimowa)" maxlength="280" rows="4"></textarea>
+        <div class="pm-form-footer">
+          <span id="pmCharCount" class="pm-char-count">0 / 280</span>
+          <button class="pm-form-submit" id="pmFormSubmit">Dodaj intencję</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#prayers-modal -->
 
   <!-- SKRYPTY APLIKACJI -->
   <script>
@@ -2379,7 +2654,7 @@
       });
 
       // --- 5. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
-      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-4)');
+      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-3):not(.tile-4)');
       const genericModal = document.getElementById('modalOverlay');
       const modalTitle = document.getElementById('modalTitle');
       const modalBody = document.getElementById('modalBody');
@@ -2470,6 +2745,124 @@
           lightboxPrev.click();
         }
       }
+
+      // --- 11. MODUŁ SŁOWO I MODLITWA ---
+      (function() {
+        const prayersModal = document.getElementById('prayers-modal');
+        const pmDashboard  = document.getElementById('pm-dashboard');
+        const pmSubviews   = document.querySelectorAll('.pm-subview');
+        const tilePrayers  = document.getElementById('tile-prayers');
+        const pmCloseBtn   = document.getElementById('pmCloseBtn');
+
+        if (!prayersModal) return;
+
+        // Ustaw daty
+        const pmToday = new Date();
+        const pmDateStr = pmToday.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+        document.querySelectorAll('#pmDate, #pmDate1, #pmDate2').forEach(el => { if(el) el.textContent = pmDateStr; });
+
+        // Baner liturgiczny
+        const pmBanner = document.getElementById('pmLiturgyBanner');
+        if (pmBanner) {
+          try {
+            const litDay = getLiturgicalDay(pmToday);
+            if (litDay) pmBanner.textContent = '\u2726  ' + litDay + '  \u2726';
+            else pmBanner.style.display = 'none';
+          } catch(e) { pmBanner.style.display = 'none'; }
+        }
+
+        function showPrayersModal() {
+          prayersModal.classList.remove('hidden');
+          pmDashboard.classList.remove('hidden');
+          pmSubviews.forEach(v => v.classList.add('hidden'));
+        }
+        function closePrayersModal() { prayersModal.classList.add('hidden'); }
+        function showSubview(id) {
+          pmDashboard.classList.add('hidden');
+          pmSubviews.forEach(v => v.classList.add('hidden'));
+          document.getElementById(id).classList.remove('hidden');
+        }
+        function backToDashboard() {
+          pmSubviews.forEach(v => v.classList.add('hidden'));
+          pmDashboard.classList.remove('hidden');
+        }
+
+        if (tilePrayers) tilePrayers.addEventListener('click', showPrayersModal);
+        if (pmCloseBtn)  pmCloseBtn.addEventListener('click', closePrayersModal);
+
+        const t1 = document.getElementById('pmTile1');
+        const t2 = document.getElementById('pmTile2');
+        const t3 = document.getElementById('pmTile3');
+        const t4 = document.getElementById('pmTile4');
+        if (t1) t1.addEventListener('click', () => showSubview('pm-view-1'));
+        if (t2) t2.addEventListener('click', () => showSubview('pm-view-2'));
+        if (t3) t3.addEventListener('click', () => showSubview('pm-view-3'));
+        if (t4) t4.addEventListener('click', () => showSubview('pm-view-4'));
+
+        document.querySelectorAll('.pm-back-to-dash').forEach(btn => {
+          btn.addEventListener('click', backToDashboard);
+        });
+
+        // Ściana Intencji
+        let intentions = [
+          { text: 'W intencji zdrowia dla chorego członka mojej rodziny.', count: 12 },
+          { text: 'Za wszystkich, którzy stracili bliskich w tym roku.', count: 8 },
+          { text: 'O pokój na świecie i zakończenie wojen.', count: 31 },
+          { text: 'Za dzieci przygotowujące się do Pierwszej Komunii Świętej.', count: 5 },
+        ];
+        let voted = new Set();
+
+        function renderIntentions() {
+          const list = document.getElementById('pm-intentions-list');
+          if (!list) return;
+          list.innerHTML = '';
+          intentions.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'pm-intention-card';
+            const isVoted = voted.has(index);
+            card.innerHTML =
+              '<p class="pm-intention-text">' + item.text + '</p>' +
+              '<button class="pm-pray-btn' + (isVoted ? ' pm-pray-btn--active' : '') + '" data-index="' + index + '"' + (isVoted ? ' disabled' : '') + '>' +
+              '<i class="fa-solid fa-hands-praying"></i>' +
+              'Podejmuję modlitwę' +
+              '<span class="pm-pray-count">' + item.count + '</span>' +
+              '</button>';
+            list.appendChild(card);
+          });
+          list.querySelectorAll('.pm-pray-btn:not([disabled])').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const i = parseInt(btn.dataset.index);
+              intentions[i].count++;
+              voted.add(i);
+              renderIntentions();
+            });
+          });
+        }
+        renderIntentions();
+
+        const addBtn    = document.getElementById('pmAddIntentionBtn');
+        const form      = document.getElementById('pm-intention-form');
+        const formClose = document.getElementById('pmFormClose');
+        const textarea  = document.getElementById('pmIntentionText');
+        const charCount = document.getElementById('pmCharCount');
+        const submitBtn = document.getElementById('pmFormSubmit');
+
+        if (addBtn)    addBtn.addEventListener('click', () => form.classList.remove('hidden'));
+        if (formClose) formClose.addEventListener('click', () => form.classList.add('hidden'));
+        if (textarea)  textarea.addEventListener('input', () => {
+          charCount.textContent = textarea.value.length + ' / 280';
+        });
+        if (submitBtn) submitBtn.addEventListener('click', () => {
+          const txt = textarea.value.trim();
+          if (!txt) return;
+          intentions.unshift({ text: txt, count: 0 });
+          renderIntentions();
+          textarea.value = '';
+          charCount.textContent = '0 / 280';
+          form.classList.add('hidden');
+        });
+      })();
+
     });
   </script>
 </body>
