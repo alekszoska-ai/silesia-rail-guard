@@ -1014,7 +1014,7 @@
       overflow: hidden;
       transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    #prayers-modal.hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+    #prayers-modal.pm-hidden { display: none !important; }
     .pm-bg-symbols { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .pm-sym { position: absolute; color: rgba(160,200,255,0.04); }
     .pm-sym-1 { top: 5%; left: -5%; font-size: 220px; transform: rotate(-20deg); }
@@ -1022,6 +1022,7 @@
     .pm-sym-3 { top: 38%; left: 55%; font-size: 140px; transform: rotate(-8deg); }
     .pm-sym-4 { top: 68%; left: 5%; font-size: 160px; transform: rotate(10deg); }
     #pm-dashboard, .pm-subview { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
+    .pm-hidden { display: none !important; }
     .pm-topbar {
       display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 68px; flex-shrink: 0;
       background: rgba(8,18,45,0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -2032,7 +2033,7 @@
 
 
   <!-- ===== MODAL: SŁOWO I MODLITWA ===== -->
-  <div id="prayers-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Słowo i Modlitwa">
+  <div id="prayers-modal" class="pm-hidden" role="dialog" aria-modal="true" aria-label="Słowo i Modlitwa">
 
     <div class="pm-bg-symbols" aria-hidden="true">
       <i class="fa-solid fa-cross pm-sym pm-sym-1"></i>
@@ -2078,7 +2079,7 @@
     </div>
 
     <!-- PODSTRONA 1: Słowo na dziś -->
-    <div id="pm-view-1" class="pm-subview hidden">
+    <div id="pm-view-1" class="pm-subview pm-hidden">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info">
@@ -2103,7 +2104,7 @@
     </div>
 
     <!-- PODSTRONA 2: Liturgia Godzin -->
-    <div id="pm-view-2" class="pm-subview hidden">
+    <div id="pm-view-2" class="pm-subview pm-hidden">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info">
@@ -2134,7 +2135,7 @@
     </div>
 
     <!-- PODSTRONA 3: Skarbiec Modlitw -->
-    <div id="pm-view-3" class="pm-subview hidden">
+    <div id="pm-view-3" class="pm-subview pm-hidden">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info"><span class="pm-topbar-title">Skarbiec Modlitw</span></div>
@@ -2166,7 +2167,7 @@
     </div>
 
     <!-- PODSTRONA 4: Ściana Intencji -->
-    <div id="pm-view-4" class="pm-subview hidden">
+    <div id="pm-view-4" class="pm-subview pm-hidden">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info">
@@ -2772,19 +2773,19 @@
         }
 
         function showPrayersModal() {
-          prayersModal.classList.remove('hidden');
-          pmDashboard.classList.remove('hidden');
-          pmSubviews.forEach(v => v.classList.add('hidden'));
+          prayersModal.classList.remove('pm-hidden');
+          pmDashboard.classList.remove('pm-hidden');
+          pmSubviews.forEach(v => v.classList.add('pm-hidden'));
         }
-        function closePrayersModal() { prayersModal.classList.add('hidden'); }
+        function closePrayersModal() { prayersModal.classList.add('pm-hidden'); }
         function showSubview(id) {
-          pmDashboard.classList.add('hidden');
-          pmSubviews.forEach(v => v.classList.add('hidden'));
-          document.getElementById(id).classList.remove('hidden');
+          pmDashboard.classList.add('pm-hidden');
+          pmSubviews.forEach(v => v.classList.add('pm-hidden'));
+          document.getElementById(id).classList.remove('pm-hidden');
         }
         function backToDashboard() {
-          pmSubviews.forEach(v => v.classList.add('hidden'));
-          pmDashboard.classList.remove('hidden');
+          pmSubviews.forEach(v => v.classList.add('pm-hidden'));
+          pmDashboard.classList.remove('pm-hidden');
         }
 
         if (tilePrayers) tilePrayers.addEventListener('click', showPrayersModal);
