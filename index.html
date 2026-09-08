@@ -1014,7 +1014,7 @@
       overflow: hidden;
       transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    #prayers-modal.pm-hidden { display: none !important; }
+    #prayers-modal.hidden { display: none !important; }
     .pm-bg-symbols { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .pm-sym { position: absolute; color: rgba(160,200,255,0.04); }
     .pm-sym-1 { top: 5%; left: -5%; font-size: 220px; transform: rotate(-20deg); }
@@ -1022,7 +1022,6 @@
     .pm-sym-3 { top: 38%; left: 55%; font-size: 140px; transform: rotate(-8deg); }
     .pm-sym-4 { top: 68%; left: 5%; font-size: 160px; transform: rotate(10deg); }
     #pm-dashboard, .pm-subview { position: absolute; inset: 0; display: flex; flex-direction: column; z-index: 1; }
-    .pm-hidden { display: none !important; }
     .pm-topbar {
       display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 68px; flex-shrink: 0;
       background: rgba(8,18,45,0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -2033,7 +2032,7 @@
 
 
   <!-- ===== MODAL: SŁOWO I MODLITWA ===== -->
-  <div id="prayers-modal" class="pm-hidden" role="dialog" aria-modal="true" aria-label="Słowo i Modlitwa">
+  <div id="prayers-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Słowo i Modlitwa">
 
     <div class="pm-bg-symbols" aria-hidden="true">
       <i class="fa-solid fa-cross pm-sym pm-sym-1"></i>
@@ -2079,7 +2078,7 @@
     </div>
 
     <!-- PODSTRONA 1: Słowo na dziś -->
-    <div id="pm-view-1" class="pm-subview pm-hidden">
+    <div id="pm-view-1" class="pm-subview">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info">
@@ -2104,7 +2103,7 @@
     </div>
 
     <!-- PODSTRONA 2: Liturgia Godzin -->
-    <div id="pm-view-2" class="pm-subview pm-hidden">
+    <div id="pm-view-2" class="pm-subview">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info">
@@ -2135,7 +2134,7 @@
     </div>
 
     <!-- PODSTRONA 3: Skarbiec Modlitw -->
-    <div id="pm-view-3" class="pm-subview pm-hidden">
+    <div id="pm-view-3" class="pm-subview">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info"><span class="pm-topbar-title">Skarbiec Modlitw</span></div>
@@ -2167,7 +2166,7 @@
     </div>
 
     <!-- PODSTRONA 4: Ściana Intencji -->
-    <div id="pm-view-4" class="pm-subview pm-hidden">
+    <div id="pm-view-4" class="pm-subview">
       <div class="pm-topbar">
         <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info">
@@ -2749,117 +2748,135 @@
 
       // --- 11. MODUŁ SŁOWO I MODLITWA ---
       (function() {
-        const prayersModal = document.getElementById('prayers-modal');
-        const pmDashboard  = document.getElementById('pm-dashboard');
-        const pmSubviews   = document.querySelectorAll('.pm-subview');
-        const tilePrayers  = document.getElementById('tile-prayers');
-        const pmCloseBtn   = document.getElementById('pmCloseBtn');
+        var prayersModal = document.getElementById('prayers-modal');
+        var pmDashboard  = document.getElementById('pm-dashboard');
+        var pmSubviews   = Array.from(document.querySelectorAll('.pm-subview'));
+        var tilePrayers  = document.getElementById('tile-prayers');
+        var pmCloseBtn   = document.getElementById('pmCloseBtn');
 
-        if (!prayersModal) return;
+        if (!prayersModal) { console.warn('prayers-modal not found'); return; }
 
-        // Ustaw daty
-        const pmToday = new Date();
-        const pmDateStr = pmToday.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
-        document.querySelectorAll('#pmDate, #pmDate1, #pmDate2').forEach(el => { if(el) el.textContent = pmDateStr; });
+        // ── Helpers ──────────────────────────────────────────
+        function hideEl(el)  { if (el) el.style.display = 'none'; }
+        function showFlex(el){ if (el) el.style.display = 'flex'; }
 
-        // Baner liturgiczny
-        const pmBanner = document.getElementById('pmLiturgyBanner');
+        function resetAll() {
+          hideEl(pmDashboard);
+          pmSubviews.forEach(hideEl);
+        }
+
+        function openModal() {
+          prayersModal.classList.remove('hidden');
+          resetAll();
+          showFlex(pmDashboard);
+        }
+
+        function closeModal() {
+          prayersModal.classList.add('hidden');
+          resetAll();
+        }
+
+        function showSubview(id) {
+          resetAll();
+          showFlex(document.getElementById(id));
+        }
+
+        function backToDash() {
+          resetAll();
+          showFlex(pmDashboard);
+        }
+
+        // ── Initial state: hide everything inside modal ───────
+        resetAll();
+
+        // ── Date display ─────────────────────────────────────
+        var pmToday  = new Date();
+        var pmDateStr = pmToday.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+        ['pmDate','pmDate1','pmDate2'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) el.textContent = pmDateStr;
+        });
+
+        // ── Liturgy banner ────────────────────────────────────
+        var pmBanner = document.getElementById('pmLiturgyBanner');
         if (pmBanner) {
           try {
-            const litDay = getLiturgicalDay(pmToday);
-            if (litDay) pmBanner.textContent = '\u2726  ' + litDay + '  \u2726';
-            else pmBanner.style.display = 'none';
+            var litDay = getLiturgicalDay(pmToday);
+            pmBanner.textContent = litDay ? ('✦  ' + litDay + '  ✦') : '';
+            if (!litDay) pmBanner.style.display = 'none';
           } catch(e) { pmBanner.style.display = 'none'; }
         }
 
-        function showPrayersModal() {
-          prayersModal.classList.remove('pm-hidden');
-          pmDashboard.classList.remove('pm-hidden');
-          pmSubviews.forEach(v => v.classList.add('pm-hidden'));
-        }
-        function closePrayersModal() { prayersModal.classList.add('pm-hidden'); }
-        function showSubview(id) {
-          pmDashboard.classList.add('pm-hidden');
-          pmSubviews.forEach(v => v.classList.add('pm-hidden'));
-          document.getElementById(id).classList.remove('pm-hidden');
-        }
-        function backToDashboard() {
-          pmSubviews.forEach(v => v.classList.add('pm-hidden'));
-          pmDashboard.classList.remove('pm-hidden');
-        }
+        // ── Event listeners ───────────────────────────────────
+        if (tilePrayers) tilePrayers.addEventListener('click', openModal);
+        if (pmCloseBtn)  pmCloseBtn.addEventListener('click',  closeModal);
 
-        if (tilePrayers) tilePrayers.addEventListener('click', showPrayersModal);
-        if (pmCloseBtn)  pmCloseBtn.addEventListener('click', closePrayersModal);
-
-        const t1 = document.getElementById('pmTile1');
-        const t2 = document.getElementById('pmTile2');
-        const t3 = document.getElementById('pmTile3');
-        const t4 = document.getElementById('pmTile4');
-        if (t1) t1.addEventListener('click', () => showSubview('pm-view-1'));
-        if (t2) t2.addEventListener('click', () => showSubview('pm-view-2'));
-        if (t3) t3.addEventListener('click', () => showSubview('pm-view-3'));
-        if (t4) t4.addEventListener('click', () => showSubview('pm-view-4'));
-
-        document.querySelectorAll('.pm-back-to-dash').forEach(btn => {
-          btn.addEventListener('click', backToDashboard);
+        ['pmTile1','pmTile2','pmTile3','pmTile4'].forEach(function(id, i) {
+          var el = document.getElementById(id);
+          if (el) el.addEventListener('click', function() {
+            showSubview('pm-view-' + (i + 1));
+          });
         });
 
-        // Ściana Intencji
-        let intentions = [
+        document.querySelectorAll('.pm-back-to-dash').forEach(function(btn) {
+          btn.addEventListener('click', backToDash);
+        });
+
+        // ── Ściana Intencji ───────────────────────────────────
+        var intentions = [
           { text: 'W intencji zdrowia dla chorego członka mojej rodziny.', count: 12 },
           { text: 'Za wszystkich, którzy stracili bliskich w tym roku.', count: 8 },
           { text: 'O pokój na świecie i zakończenie wojen.', count: 31 },
-          { text: 'Za dzieci przygotowujące się do Pierwszej Komunii Świętej.', count: 5 },
+          { text: 'Za dzieci przygotowujące się do Pierwszej Komunii Świętej.', count: 5 }
         ];
-        let voted = new Set();
+        var voted = {};
 
         function renderIntentions() {
-          const list = document.getElementById('pm-intentions-list');
+          var list = document.getElementById('pm-intentions-list');
           if (!list) return;
           list.innerHTML = '';
-          intentions.forEach((item, index) => {
-            const card = document.createElement('div');
+          intentions.forEach(function(item, i) {
+            var card = document.createElement('div');
             card.className = 'pm-intention-card';
-            const isVoted = voted.has(index);
+            var btnClass = 'pm-pray-btn' + (voted[i] ? ' pm-pray-btn--active' : '');
+            var btnDisabled = voted[i] ? ' disabled' : '';
             card.innerHTML =
               '<p class="pm-intention-text">' + item.text + '</p>' +
-              '<button class="pm-pray-btn' + (isVoted ? ' pm-pray-btn--active' : '') + '" data-index="' + index + '"' + (isVoted ? ' disabled' : '') + '>' +
-              '<i class="fa-solid fa-hands-praying"></i>' +
-              'Podejmuję modlitwę' +
+              '<button class="' + btnClass + '" data-idx="' + i + '"' + btnDisabled + '>' +
+              '<i class="fa-solid fa-hands-praying"></i> Podejmuję modlitwę' +
               '<span class="pm-pray-count">' + item.count + '</span>' +
               '</button>';
             list.appendChild(card);
           });
-          list.querySelectorAll('.pm-pray-btn:not([disabled])').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const i = parseInt(btn.dataset.index);
-              intentions[i].count++;
-              voted.add(i);
+          list.querySelectorAll('.pm-pray-btn:not([disabled])').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              var idx = parseInt(btn.getAttribute('data-idx'));
+              intentions[idx].count++;
+              voted[idx] = true;
               renderIntentions();
             });
           });
         }
         renderIntentions();
 
-        const addBtn    = document.getElementById('pmAddIntentionBtn');
-        const form      = document.getElementById('pm-intention-form');
-        const formClose = document.getElementById('pmFormClose');
-        const textarea  = document.getElementById('pmIntentionText');
-        const charCount = document.getElementById('pmCharCount');
-        const submitBtn = document.getElementById('pmFormSubmit');
+        // Form
+        var addBtn  = document.getElementById('pmAddIntentionBtn');
+        var form    = document.getElementById('pm-intention-form');
+        var fClose  = document.getElementById('pmFormClose');
+        var fText   = document.getElementById('pmIntentionText');
+        var fCount  = document.getElementById('pmCharCount');
+        var fSubmit = document.getElementById('pmFormSubmit');
 
-        if (addBtn)    addBtn.addEventListener('click', () => form.classList.remove('hidden'));
-        if (formClose) formClose.addEventListener('click', () => form.classList.add('hidden'));
-        if (textarea)  textarea.addEventListener('input', () => {
-          charCount.textContent = textarea.value.length + ' / 280';
-        });
-        if (submitBtn) submitBtn.addEventListener('click', () => {
-          const txt = textarea.value.trim();
+        if (addBtn)  addBtn.addEventListener('click',  function() { form.classList.remove('hidden'); });
+        if (fClose)  fClose.addEventListener('click',  function() { form.classList.add('hidden'); });
+        if (fText)   fText.addEventListener('input',   function() { fCount.textContent = fText.value.length + ' / 280'; });
+        if (fSubmit) fSubmit.addEventListener('click', function() {
+          var txt = fText.value.trim();
           if (!txt) return;
           intentions.unshift({ text: txt, count: 0 });
           renderIntentions();
-          textarea.value = '';
-          charCount.textContent = '0 / 280';
+          fText.value = '';
+          fCount.textContent = '0 / 280';
           form.classList.add('hidden');
         });
       })();
