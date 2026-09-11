@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="./assets/brewiarz-data.js"></script>
 
   <style>
     /* ============================================================
@@ -1117,6 +1118,132 @@
       font-family: var(--font); cursor: pointer; box-shadow: 0 4px 14px rgba(60,100,255,0.45);
     }
 
+    /* ============================================================
+       LITURGIA GODZIN – BREWIARZ
+    ============================================================ */
+    .brw-tabs {
+      display: flex; gap: 8px; padding: 14px 16px 0;
+      flex-shrink: 0;
+    }
+    .brw-tab {
+      flex: 1; padding: 10px 6px; border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(100,150,255,0.18);
+      color: rgba(180,210,255,0.65); font-size: 13px; font-weight: 700;
+      font-family: var(--font); cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.22,1,0.36,1);
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .brw-tab.active {
+      background: linear-gradient(135deg, rgba(80,130,255,0.45), rgba(120,70,240,0.35));
+      border-color: rgba(120,160,255,0.55);
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(80,120,255,0.28);
+    }
+    .brw-tab i { font-size: 15px; }
+    .brw-week-badge {
+      margin: 10px 16px 2px;
+      padding: 7px 13px;
+      background: rgba(255,210,80,0.10);
+      border: 1px solid rgba(255,210,80,0.22);
+      border-radius: 10px;
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,215,120,0.9);
+      text-align: center; letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .brw-hora-panel { display: none; flex: 1; overflow-y: auto; padding: 8px 16px 32px; scrollbar-width: none; }
+    .brw-hora-panel::-webkit-scrollbar { display: none; }
+    .brw-hora-panel.active { display: block; }
+    .brw-section {
+      margin-bottom: 14px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(100,150,255,0.16);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .brw-section-header {
+      display: flex; align-items: center; gap: 9px;
+      padding: 12px 16px 11px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(100,150,255,0.12);
+      cursor: pointer; user-select: none;
+    }
+    .brw-section-header i.brw-icon {
+      width: 30px; height: 30px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .brw-section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: rgba(160,200,255,0.75);
+      flex: 1;
+    }
+    .brw-section-title {
+      font-size: 13px; font-weight: 600; color: rgba(220,235,255,0.9);
+      margin-top: 2px;
+    }
+    .brw-chevron {
+      color: rgba(160,200,255,0.5); font-size: 12px;
+      transition: transform 0.22s;
+    }
+    .brw-section.collapsed .brw-chevron { transform: rotate(-90deg); }
+    .brw-section-body {
+      padding: 14px 16px 16px;
+      font-size: 15.5px; line-height: 1.82;
+      color: rgba(220,235,255,0.92);
+      white-space: pre-wrap;
+      font-family: 'Georgia', 'Palatino', serif;
+      letter-spacing: 0.01em;
+    }
+    .brw-section.collapsed .brw-section-body { display: none; }
+    .brw-section-body em { color: rgba(255,215,120,0.9); font-style: normal; font-weight: 600; }
+    /* Psalm respond */
+    .brw-respond {
+      margin-top: 14px; padding: 10px 14px;
+      background: rgba(160,80,255,0.08);
+      border-left: 3px solid rgba(160,80,255,0.5);
+      border-radius: 0 8px 8px 0;
+      font-size: 14px; color: rgba(200,180,255,0.9);
+    }
+    /* Prośby */
+    .brw-prosby-intro {
+      font-size: 13px; font-style: italic;
+      color: rgba(180,210,255,0.7);
+      margin-bottom: 12px; line-height: 1.5;
+    }
+    .brw-wezwanie {
+      margin-bottom: 10px;
+      padding: 10px 13px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      border-left: 2.5px solid rgba(100,180,255,0.4);
+    }
+    .brw-wezwanie-tekst {
+      font-size: 14.5px; color: rgba(220,235,255,0.92);
+      line-height: 1.6; margin-bottom: 4px;
+    }
+    .brw-wezwanie-odp {
+      font-size: 13px; color: rgba(255,215,120,0.85);
+      font-weight: 600; letter-spacing: 0.03em;
+    }
+    /* Opening versicle */
+    .brw-opening {
+      text-align: center;
+      font-size: 15px; line-height: 1.8;
+      color: rgba(200,225,255,0.88);
+      white-space: pre-wrap;
+      font-family: 'Georgia', serif;
+      margin: 2px 0 6px;
+    }
+    /* Color coding per section type */
+    .brw-icon-opening  { background: rgba(255,210,80,0.18); color: #ffd95a; }
+    .brw-icon-hymn     { background: rgba(120,80,255,0.22); color: #c380ff; }
+    .brw-icon-psalm    { background: rgba(60,140,255,0.20); color: #7ab8ff; }
+    .brw-icon-kantyk   { background: rgba(60,200,120,0.20); color: #5de8a0; }
+    .brw-icon-prosby   { background: rgba(255,120,80,0.18); color: #ff9470; }
+    .brw-icon-modlitwa { background: rgba(255,200,80,0.18); color: #ffd95a; }
+
     /* Galeria (Archiwum) */
     .gallery-year-header {
       margin: 15px 0 5px;
@@ -2102,34 +2229,37 @@
       </div>
     </div>
 
-    <!-- PODSTRONA 2: Liturgia Godzin -->
+    <!-- PODSTRONA 2: Liturgia Godzin (Brewiarz) -->
     <div id="pm-view-2" class="pm-subview">
       <div class="pm-topbar">
-        <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-back-btn pm-back-to-dash" role="button" aria-label="Wróć do pulpitu"><i class="fa-solid fa-arrow-left"></i></div>
         <div class="pm-topbar-info">
           <span class="pm-topbar-title">Liturgia Godzin</span>
           <span class="pm-topbar-date" id="pmDate2"></span>
         </div>
       </div>
-      <div class="pm-scroll">
-        <div class="pm-section-label"><i class="fa-solid fa-sun"></i> Jutrznia (Laudes)</div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Otwarcie</p>
-          <p class="pm-reading-text pm-prayer-center">℣ Boże, wejrzyj ku wspomożeniu memu.<br>℟ Panie, pospiesz ku ratunkowi memu.<br><br>Chwała Ojcu i Synowi, i Duchowi Świętemu,<br>jak była na początku, teraz i zawsze,<br>i na wieki wieków. Amen.</p>
-        </div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Modlitwa poranna</p>
-          <p class="pm-reading-text">Panie, nasz Boże, dzięki Ci składamy za ten nowy dzień. Niech każda chwila będzie okazją do czynienia dobra i zbliżania się do Ciebie. Daj nam mądrość i siłę, byśmy wypełniali Twoją wolę. Przez Chrystusa, Pana naszego. Amen.</p>
-        </div>
-        <div class="pm-section-label" style="margin-top:20px"><i class="fa-solid fa-moon"></i> Nieszpory (Vesperae)</div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Magnificat (Łk 1, 46–55)</p>
-          <p class="pm-reading-text pm-prayer-center">Wielbi dusza moja Pana<br>i raduje się duch mój w Bogu, moim Zbawcy.<br>Bo wejrzał na uniżenie Służebnicy swojej.<br><br>Oto bowiem błogosławić mnie będą<br>odtąd wszystkie pokolenia,<br>gdyż wielkie rzeczy uczynił mi Wszechmocny.<br><br>Święte jest Jego imię,<br>a swoje miłosierdzie na pokolenia i pokolenia<br>zachowuje dla tych, co się Go boją.</p>
-        </div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Modlitwa wieczorna</p>
-          <p class="pm-reading-text">Wszechmogący Boże, gdy kończy się ten dzień, powierzamy Ci wszystkie nasze sprawy. Za dobro – dziękujemy. Za zło i słabości – przepraszamy. Otocz nas swoją opieką tej nocy. Amen.</p>
-        </div>
+
+      <!-- Zakładki Jutrznia / Nieszpory -->
+      <div class="brw-tabs" role="tablist">
+        <button class="brw-tab active" id="brw-tab-jutrznia" role="tab" aria-selected="true" aria-controls="brw-panel-jutrznia">
+          <i class="fa-solid fa-sun"></i> Jutrznia
+        </button>
+        <button class="brw-tab" id="brw-tab-nieszpory" role="tab" aria-selected="false" aria-controls="brw-panel-nieszpory">
+          <i class="fa-solid fa-moon"></i> Nieszpory
+        </button>
+      </div>
+
+      <!-- Tydzień psałterza -->
+      <div class="brw-week-badge" id="brw-week-badge">Ładowanie...</div>
+
+      <!-- Panel Jutrzni -->
+      <div class="brw-hora-panel active" id="brw-panel-jutrznia" role="tabpanel" aria-labelledby="brw-tab-jutrznia">
+        <!-- Wypełniane przez JS -->
+      </div>
+
+      <!-- Panel Nieszporów -->
+      <div class="brw-hora-panel" id="brw-panel-nieszpory" role="tabpanel" aria-labelledby="brw-tab-nieszpory">
+        <!-- Wypełniane przez JS -->
       </div>
     </div>
 
@@ -2745,6 +2875,199 @@
           lightboxPrev.click();
         }
       }
+
+      // --- 10b. MODUŁ LITURGIA GODZIN (BREWIARZ) ---
+      (function() {
+        var today = new Date();
+
+        // ── Pomocnik renderowania sekcji (z accordion) ──────────────
+        function renderSekcja(ikonaClass, ikonaBg, sectionLabel, tytul, tresc, collapsed) {
+          var isCollapsed = collapsed ? ' collapsed' : '';
+          var bodyHtml = tresc;
+          return '<div class="brw-section' + isCollapsed + '">' +
+            '<div class="brw-section-header">' +
+              '<div class="brw-icon ' + ikonaBg + '"><i class="' + ikonaClass + '"></i></div>' +
+              '<div style="flex:1">' +
+                '<div class="brw-section-label">' + sectionLabel + '</div>' +
+                (tytul ? '<div class="brw-section-title">' + tytul + '</div>' : '') +
+              '</div>' +
+              '<i class="fa-solid fa-chevron-down brw-chevron"></i>' +
+            '</div>' +
+            '<div class="brw-section-body">' + bodyHtml + '</div>' +
+          '</div>';
+        }
+
+        function escHtml(str) {
+          return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function renderTekst(str) {
+          // Pogrub wersety liturgiczne ℣ ℟
+          return escHtml(str)
+            .replace(/℣/g,'<em>℣</em>')
+            .replace(/℟/g,'<em>℟</em>');
+        }
+
+        function renderHora(hora, panelId) {
+          var panel = document.getElementById(panelId);
+          if (!panel) return;
+
+          if (typeof window.BREWIARZ === 'undefined' || typeof window.BREWIARZ_DATA === 'undefined') {
+            panel.innerHTML = '<p style="color:rgba(255,200,100,0.8);padding:20px;text-align:center">Ładowanie danych brewiarza...</p>';
+            return;
+          }
+
+          var dane = window.BREWIARZ.pobierzDane(today, hora);
+          if (!dane) {
+            panel.innerHTML = '<p style="color:rgba(255,200,100,0.8);padding:20px;text-align:center">Brak danych dla dzisiejszego dnia.</p>';
+            return;
+          }
+
+          var html = '';
+
+          // Otwarcie
+          html += renderSekcja(
+            'fa-solid fa-hands-praying', 'brw-icon-opening',
+            'Otwarcie', null,
+            '<div class="brw-opening">' + renderTekst(dane.otwarcie) + '</div>',
+            true
+          );
+
+          // Hymn
+          if (dane.hymn) {
+            html += renderSekcja(
+              'fa-solid fa-music', 'brw-icon-hymn',
+              'Hymn', dane.hymn.label,
+              renderTekst(dane.hymn.tekst),
+              false
+            );
+          }
+
+          // Psalmy
+          if (dane.psalmy && dane.psalmy.length) {
+            dane.psalmy.forEach(function(ps, idx) {
+              var ikona = ps.label.toLowerCase().indexOf('kantyk') >= 0
+                ? 'fa-solid fa-scroll' : 'fa-solid fa-book';
+              html += renderSekcja(
+                ikona, 'brw-icon-psalm',
+                (ps.label.toLowerCase().indexOf('kantyk') >= 0 ? 'Kantyk' : 'Psalm ' + (idx+1)),
+                ps.label,
+                renderTekst(ps.tekst),
+                idx > 0
+              );
+            });
+          }
+
+          // Kantyk (Zachariasza / Maryi)
+          if (dane.kantyk) {
+            html += renderSekcja(
+              'fa-solid fa-star', 'brw-icon-kantyk',
+              hora === 'jutrznia' ? 'Kantyk Zachariasza' : 'Kantyk Maryi',
+              dane.kantyk.label,
+              renderTekst(dane.kantyk.tekst),
+              false
+            );
+          }
+
+          // Prośby
+          if (dane.prosby) {
+            var prosbyHtml = '<div class="brw-prosby-intro">' + escHtml(dane.prosby.intro) + '</div>';
+            dane.prosby.wezwania.forEach(function(w) {
+              prosbyHtml +=
+                '<div class="brw-wezwanie">' +
+                  '<div class="brw-wezwanie-tekst">' + escHtml(w.wezw) + '</div>' +
+                  '<div class="brw-wezwanie-odp">' + renderTekst(w.odp) + '</div>' +
+                '</div>';
+            });
+            html += renderSekcja(
+              'fa-solid fa-heart', 'brw-icon-prosby',
+              'Prośby', dane.prosby.label,
+              prosbyHtml,
+              false
+            );
+          }
+
+          // Ojcze nasz
+          if (dane.modlitwa) {
+            html += renderSekcja(
+              'fa-solid fa-cross', 'brw-icon-modlitwa',
+              'Modlitwa Pańska', dane.modlitwa.label,
+              '<div class="brw-opening">' + renderTekst(dane.modlitwa.tekst) + '</div>',
+              false
+            );
+          }
+
+          panel.innerHTML = html;
+
+          // Accordion toggle
+          panel.querySelectorAll('.brw-section-header').forEach(function(hdr) {
+            hdr.addEventListener('click', function() {
+              hdr.closest('.brw-section').classList.toggle('collapsed');
+            });
+          });
+        }
+
+        // ── Inicjalizacja po otwarciu widoku ───────────────────────
+        function initBrewiarz() {
+          // Tydzień psałterza
+          var badge = document.getElementById('brw-week-badge');
+          if (badge && window.BREWIARZ) {
+            badge.textContent = window.BREWIARZ.opisTygodnia(today);
+          }
+
+          // Data w topbarze
+          var pmDate2 = document.getElementById('pmDate2');
+          if (pmDate2) {
+            pmDate2.textContent = today.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+          }
+
+          renderHora('jutrznia', 'brw-panel-jutrznia');
+          renderHora('nieszpory', 'brw-panel-nieszpory');
+        }
+
+        // ── Zakładki ────────────────────────────────────────────────
+        var tabJutrznia  = document.getElementById('brw-tab-jutrznia');
+        var tabNieszpory = document.getElementById('brw-tab-nieszpory');
+        var panelJutrznia  = document.getElementById('brw-panel-jutrznia');
+        var panelNieszpory = document.getElementById('brw-panel-nieszpory');
+
+        function activateTab(which) {
+          if (which === 'jutrznia') {
+            tabJutrznia.classList.add('active');  tabJutrznia.setAttribute('aria-selected','true');
+            tabNieszpory.classList.remove('active'); tabNieszpory.setAttribute('aria-selected','false');
+            panelJutrznia.classList.add('active'); panelNieszpory.classList.remove('active');
+          } else {
+            tabNieszpory.classList.add('active'); tabNieszpory.setAttribute('aria-selected','true');
+            tabJutrznia.classList.remove('active'); tabJutrznia.setAttribute('aria-selected','false');
+            panelNieszpory.classList.add('active'); panelJutrznia.classList.remove('active');
+          }
+        }
+
+        if (tabJutrznia) tabJutrznia.addEventListener('click', function() { activateTab('jutrznia'); });
+        if (tabNieszpory) tabNieszpory.addEventListener('click', function() { activateTab('nieszpory'); });
+
+        // Wybierz zakładkę zależnie od godziny (przed 17 = Jutrznia, po 17 = Nieszpory)
+        var defaultHora = today.getHours() >= 17 ? 'nieszpory' : 'jutrznia';
+        activateTab(defaultHora);
+
+        // ── Inicjalizuj przy kliknięciu w kafelek ──────────────────
+        var pmTile2 = document.getElementById('pmTile2');
+        var initialized = false;
+        if (pmTile2) {
+          pmTile2.addEventListener('click', function() {
+            if (!initialized) {
+              initialized = true;
+              initBrewiarz();
+            }
+          });
+        }
+
+        // Również inicjalizuj od razu (jeśli dane już załadowane)
+        if (typeof window.BREWIARZ !== 'undefined') {
+          initialized = true;
+          initBrewiarz();
+        }
+      })();
 
       // --- 11. MODUŁ SŁOWO I MODLITWA ---
       (function() {
