@@ -109,7 +109,7 @@
     ============================================================ */
     .app-header {
       flex-shrink: 0;
-      height: var(--header-h);
+      min-height: 135px;
       background: rgba(25, 95, 155, 0.85);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
@@ -117,7 +117,10 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 20px 20px 0;
+      padding-top: calc(env(safe-area-inset-top, 24px) + 12px);
+      padding-bottom: 15px;
+      padding-left: 20px;
+      padding-right: 20px;
       position: relative;
       z-index: 10;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
@@ -201,7 +204,7 @@
     .header-cross {
       position: absolute;
       left: 50%;
-      bottom: -15px;
+      bottom: -10px;
       transform: translateX(-50%);
       opacity: 0.25;
       width: 55px;
@@ -356,8 +359,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
-      padding: 6px;
+      gap: 2px;
+      padding: 2px 4px;
       cursor: pointer;
       position: relative;
       overflow: hidden;
@@ -2572,10 +2575,9 @@
         const now = new Date();
 
         if (dateEl) {
-          const dayNames = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
           const monthNames = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
             'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
-          dateEl.textContent = dayNames[now.getDay()] + ', ' + now.getDate() + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear();
+          dateEl.textContent = now.getDate() + ' ' + monthNames[now.getMonth()] + ' ' + now.getFullYear();
         }
 
         if (litEl) {
