@@ -1119,6 +1119,82 @@
     }
 
     /* ============================================================
+       SYSTEM POWIĘKSZANIA CZCIONKI
+    ============================================================ */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .font-resizer {
+      display: flex;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 3px;
+      gap: 2px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .font-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 800;
+      font-family: var(--font);
+      font-size: 11px;
+      padding: 5px 9px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .font-btn.active {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    
+    html[data-font-size="large"] .pm-reading-text,
+    html[data-font-size="large"] .brw-section-body,
+    html[data-font-size="large"] .brw-opening,
+    html[data-font-size="large"] .brw-wezwanie-tekst,
+    html[data-font-size="large"] .welcome-quote,
+    html[data-font-size="large"] .feed-item-desc,
+    html[data-font-size="large"] .cal-card-desc,
+    html[data-font-size="large"] .pm-intention-text,
+    html[data-font-size="large"] p {
+      font-size: calc(15px * 1.15) !important;
+      line-height: 1.6 !important;
+    }
+    html[data-font-size="large"] .brw-wezwanie-odp,
+    html[data-font-size="large"] .pm-reading-ref {
+      font-size: calc(13px * 1.15) !important;
+    }
+    html[data-font-size="large"] .feed-item-title,
+    html[data-font-size="large"] .cal-card-title {
+      font-size: calc(16px * 1.15) !important;
+    }
+
+    html[data-font-size="xlarge"] .pm-reading-text,
+    html[data-font-size="xlarge"] .brw-section-body,
+    html[data-font-size="xlarge"] .brw-opening,
+    html[data-font-size="xlarge"] .brw-wezwanie-tekst,
+    html[data-font-size="xlarge"] .welcome-quote,
+    html[data-font-size="xlarge"] .feed-item-desc,
+    html[data-font-size="xlarge"] .cal-card-desc,
+    html[data-font-size="xlarge"] .pm-intention-text,
+    html[data-font-size="xlarge"] p {
+      font-size: calc(15px * 1.35) !important;
+      line-height: 1.7 !important;
+    }
+    html[data-font-size="xlarge"] .brw-wezwanie-odp,
+    html[data-font-size="xlarge"] .pm-reading-ref {
+      font-size: calc(13px * 1.35) !important;
+    }
+    html[data-font-size="xlarge"] .feed-item-title,
+    html[data-font-size="xlarge"] .cal-card-title {
+      font-size: calc(16px * 1.35) !important;
+    }
+
+    /* ============================================================
        LITURGIA GODZIN – BREWIARZ
     ============================================================ */
     .brw-tabs {
@@ -1758,11 +1834,15 @@
           <span class="header-liturgy" id="liturgyDay"></span>
         </span>
       </div>
-      <div class="header-cross" aria-hidden="true">
-        <i class="fa-solid fa-cross"></i>
-      </div>
-      <div class="header-avatar" role="button" aria-label="Profil" id="profileBtn">
-        <i class="fa-solid fa-user"></i>
+      <div class="header-right">
+        <div class="font-resizer" aria-label="Zmień rozmiar czcionki">
+          <button class="font-btn active" data-size="normal">A</button>
+          <button class="font-btn" data-size="large">A+</button>
+          <button class="font-btn" data-size="xlarge">A++</button>
+        </div>
+        <div class="header-avatar" role="button" aria-label="Profil" id="profileBtn">
+          <i class="fa-solid fa-user"></i>
+        </div>
       </div>
     </header>
 
@@ -3201,6 +3281,81 @@
           fText.value = '';
           fCount.textContent = '0 / 280';
           form.classList.add('hidden');
+        });
+      })();
+
+      // --- 12. GLOBALNY SYSTEM ROZMIARU CZCIONKI ---
+      (function() {
+        var fontBtns = document.querySelectorAll('.font-btn');
+        var savedSize = localStorage.getItem('app-font-size') || 'normal';
+        
+        function applyFontSize(size) {
+          document.documentElement.setAttribute('data-font-size', size);
+          fontBtns.forEach(function(btn) {
+            if (btn.getAttribute('data-size') === size) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          });
+        }
+        
+        applyFontSize(savedSize);
+        
+        fontBtns.forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var size = this.getAttribute('data-size');
+            applyFontSize(size);
+            localStorage.setItem('app-font-size', size);
+          });
+        });
+      })();
+
+      // --- 13. OBSŁUGA DOLNEGO MENU NAWIGACYJNEGO ---
+      (function() {
+        var navItems = document.querySelectorAll('.nav-item');
+        var prayersModal = document.getElementById('prayers-modal');
+        var genericModal = document.getElementById('modalOverlay');
+        var modalTitle = document.getElementById('modalTitle');
+        var modalBody = document.getElementById('modalBody');
+        
+        navItems.forEach(function(item) {
+          item.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            navItems.forEach(function(n) { n.classList.remove('active'); });
+            this.classList.add('active');
+            
+            var id = this.id;
+            
+            // Close all popups and generic modal
+            var allHidden = document.querySelectorAll('.hidden[role="dialog"]');
+            allHidden.forEach(function(m) {
+              if (!m.id.startsWith('pm-view')) {
+                m.classList.add('hidden');
+              }
+            });
+            if (genericModal) genericModal.classList.remove('open');
+            
+            if (id === 'nav-dom') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (id === 'nav-modlitwa') {
+              if (prayersModal) {
+                prayersModal.classList.remove('hidden');
+                document.getElementById('pm-dashboard').style.display = 'flex';
+                var subviews = document.querySelectorAll('.pm-subview');
+                subviews.forEach(function(sv) { sv.style.display = 'none'; });
+              }
+            } else {
+              if (modalTitle && modalBody && genericModal) {
+                var label = this.querySelector('.nav-label');
+                modalTitle.textContent = label ? label.textContent : "Funkcja";
+                modalBody.textContent = "Ten moduł jest w trakcie przygotowywania. Zapraszamy wkrótce!";
+                genericModal.classList.add('open');
+              }
+            }
+          });
         });
       })();
 
