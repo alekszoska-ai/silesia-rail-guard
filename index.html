@@ -23,7 +23,7 @@
     ============================================================ */
     :root {
       --font: 'Inter', sans-serif;
-      --header-h: 70px;
+      --header-h: 115px;
       --nav-h: 76px;
 
       --glass-bg: rgba(255, 255, 255, 0.78);
@@ -110,14 +110,14 @@
     .app-header {
       flex-shrink: 0;
       height: var(--header-h);
-      background: rgba(25, 95, 155, 0.85); /* Ciemniejszy błękit dla lepszego kontrastu z białym tekstem */
+      background: rgba(25, 95, 155, 0.85);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       border-bottom: 1px solid rgba(255, 255, 255, 0.4);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 20px 20px 0;
       position: relative;
       z-index: 10;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
@@ -141,11 +141,13 @@
     .header-left {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 6px;
+      margin-top: 4px;
+      z-index: 2;
     }
 
     .header-parish-name {
-      font-size: 14.5px;
+      font-size: 16px;
       font-weight: 800;
       color: #FFFFFF;
       letter-spacing: 0.05em;
@@ -153,7 +155,7 @@
     }
 
     .header-date {
-      font-size: 10.5px;
+      font-size: 12px;
       font-weight: 500;
       color: #FFFFFF;
       letter-spacing: 0.03em;
@@ -199,10 +201,11 @@
     .header-cross {
       position: absolute;
       left: 50%;
+      bottom: -15px;
       transform: translateX(-50%);
-      opacity: 0.35;
-      width: 44px;
-      height: 44px;
+      opacity: 0.25;
+      width: 55px;
+      height: 55px;
       background: #ffffff;
       border-radius: 50%;
       display: flex;
@@ -331,9 +334,10 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 8px;
+      gap: 10px;
       flex: 1;
       height: 100%;
+      padding-bottom: 10px;
     }
 
     /* ============================================================
@@ -1123,15 +1127,17 @@
     ============================================================ */
     .header-right {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      z-index: 2;
     }
     .font-resizer {
       display: flex;
       background: rgba(255, 255, 255, 0.12);
       border-radius: 18px;
-      padding: 3px;
-      gap: 2px;
+      padding: 4px;
+      gap: 4px;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
     }
     .font-btn {
