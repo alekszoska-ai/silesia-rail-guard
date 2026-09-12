@@ -1088,6 +1088,43 @@
     .pm-reading-text:last-child { margin-bottom: 0; }
     .pm-hymn-title { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(180,210,255,0.65); margin-bottom: 8px; }
     .pm-prayer-center { text-align: center; font-style: italic; }
+    /* ── Mały Modlitewnik – siatka przycisków ── */
+    .pmb-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .pmb-btn {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(100,150,255,0.18);
+      border-radius: 16px; padding: 14px 16px;
+      cursor: pointer; transition: background 0.18s, transform 0.15s, border-color 0.18s;
+      text-align: left; font-family: var(--font); width: 100%;
+    }
+    .pmb-btn:hover  { background: rgba(100,150,255,0.12); border-color: rgba(100,150,255,0.35); }
+    .pmb-btn:active { transform: scale(0.98); background: rgba(100,150,255,0.2); }
+    .pmb-icon {
+      width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+      background: rgba(255,200,60,0.18); color: #ffcc30;
+    }
+    .pmb-icon-blue   { background: rgba(60,130,255,0.18);  color: #7ab8ff; }
+    .pmb-icon-purple { background: rgba(160,80,255,0.18);  color: #c380ff; }
+    .pmb-icon-teal   { background: rgba(30,200,180,0.18);  color: #5ef0e0; }
+    .pmb-icon-gold   { background: rgba(255,180,30,0.18);  color: #ffd060; }
+    .pmb-icon-indigo { background: rgba(80,80,200,0.18);   color: #a0a8ff; }
+    .pmb-icon-amber  { background: rgba(240,140,30,0.18);  color: #ffa040; }
+    .pmb-icon-rose   { background: rgba(255,80,120,0.18);  color: #ff80a0; }
+    .pmb-icon-crimson{ background: rgba(200,40,60,0.18);   color: #ff7090; }
+    .pmb-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .pmb-title { font-size: 15px; font-weight: 700; color: #fff; }
+    .pmb-sub   { font-size: 12px; color: rgba(180,210,255,0.6); }
+    .pmb-arrow { color: rgba(120,160,255,0.45); font-size: 13px; flex-shrink: 0; }
+    /* ── Mały Modlitewnik – widok szczegółowy ── */
+    .pmb-detail-box {
+      border-color: rgba(255,200,60,0.20); background: rgba(255,200,60,0.04);
+      line-height: 1.85; font-size: 16px; color: rgba(225,240,255,0.95);
+    }
+    [data-font-size="large"]  .pmb-detail-box,
+    [data-font-size="large"]  .pm-reading-text { font-size: 19px; line-height: 1.9; }
+    [data-font-size="xlarge"] .pmb-detail-box,
+    [data-font-size="xlarge"] .pm-reading-text { font-size: 22px; line-height: 2.0; }
     .pm-intentions-intro { font-size: 13px; color: rgba(180,210,255,0.65); text-align: center; line-height: 1.5; margin-bottom: 16px; }
     .pm-intention-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(100,150,255,0.18); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
     .pm-intention-text { font-size: 15px; line-height: 1.65; color: rgba(220,235,255,0.92); margin-bottom: 12px; }
@@ -2349,9 +2386,9 @@
             <span class="pm-tile-sub">Jutrznia · Nieszpory</span>
           </div>
           <div class="pm-tile pm-tile-green" id="pmTile3" role="button" tabindex="0">
-            <div class="pm-tile-icon"><i class="fa-solid fa-circle-dot"></i></div>
-            <span class="pm-tile-label">Skarbiec Modlitw</span>
-            <span class="pm-tile-sub">Różaniec · Koronka</span>
+            <div class="pm-tile-icon"><i class="fa-solid fa-hands-praying"></i></div>
+            <span class="pm-tile-label">Mały Modlitewnik</span>
+            <span class="pm-tile-sub">9 modlitw · codzienne</span>
           </div>
           <div class="pm-tile pm-tile-blue" id="pmTile4" role="button" tabindex="0">
             <div class="pm-tile-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
@@ -2421,35 +2458,105 @@
       </div>
     </div>
 
-    <!-- PODSTRONA 3: Skarbiec Modlitw -->
+    <!-- PODSTRONA 3: Mały Modlitewnik – lista przycisków -->
     <div id="pm-view-3" class="pm-subview">
       <div class="pm-topbar">
-        <div class="pm-back-btn pm-back-to-dash" role="button"><i class="fa-solid fa-arrow-left"></i></div>
-        <div class="pm-topbar-info"><span class="pm-topbar-title">Skarbiec Modlitw</span></div>
+        <div class="pm-back-btn pm-back-to-dash" role="button" aria-label="Wróć do pulpitu"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info">
+          <span class="pm-topbar-title">Mały Modlitewnik</span>
+          <span class="pm-topbar-date">9 modlitw</span>
+        </div>
       </div>
       <div class="pm-scroll">
-        <div class="pm-section-label"><i class="fa-solid fa-circle-dot"></i> Różaniec Święty</div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Wyznanie wiary (Skład Apostolski)</p>
-          <p class="pm-reading-text">Wierzę w Boga, Ojca wszechmogącego, Stworzyciela nieba i ziemi, i w Jezusa Chrystusa, Syna Jego jedynego, Pana naszego, który się począł z Ducha Świętego, narodził się z Maryi Panny, umęczon pod Ponckim Piłatem, ukrzyżowan, umarł i pogrzebion, zstąpił do piekieł, trzeciego dnia zmartwychwstał, wstąpił na niebiosa, siedzi po prawicy Boga Ojca wszechmogącego, stamtąd przyjdzie sądzić żywych i umarłych. Wierzę w Ducha Świętego, Święty Kościół powszechny, Świętych obcowanie, grzechów odpuszczenie, ciała zmartwychwstanie, żywot wieczny. Amen.</p>
+        <div class="pm-section-label"><i class="fa-solid fa-hands-praying"></i> Wybierz modlitwę</div>
+        <div class="pmb-grid" id="pmb-prayer-grid">
+          <button class="pmb-btn" data-prayer="ojcze-nasz">
+            <div class="pmb-icon"><i class="fa-solid fa-cross"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Ojcze Nasz</span>
+              <span class="pmb-sub">Modlitwa Pańska</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="zdrowas">
+            <div class="pmb-icon pmb-icon-blue"><i class="fa-solid fa-star-of-david"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Zdrowaś Maryjo</span>
+              <span class="pmb-sub">Pozdrowienie Anielskie</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="wierze">
+            <div class="pmb-icon pmb-icon-purple"><i class="fa-solid fa-church"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Wierzę w Boga</span>
+              <span class="pmb-sub">Skład Apostolski</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="pod-twoja">
+            <div class="pmb-icon pmb-icon-teal"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Pod Twoją obronę</span>
+              <span class="pmb-sub">Antyfona maryjna</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="aniol-panski">
+            <div class="pmb-icon pmb-icon-gold"><i class="fa-solid fa-dove"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Anioł Pański</span>
+              <span class="pmb-sub">Angelus Domini</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="wieczorna">
+            <div class="pmb-icon pmb-icon-indigo"><i class="fa-solid fa-moon"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Modlitwa wieczorna</span>
+              <span class="pmb-sub">Na zakończenie dnia</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="aniol-stróz">
+            <div class="pmb-icon pmb-icon-amber"><i class="fa-solid fa-feather-pointed"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Anioł Stróż</span>
+              <span class="pmb-sub">Modlitwa do Anioła Stróża</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="wschod-slonca">
+            <div class="pmb-icon pmb-icon-rose"><i class="fa-solid fa-sun"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Modlitwa poranna</span>
+              <span class="pmb-sub">O wschodzie słońca</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
+          <button class="pmb-btn" data-prayer="koronka">
+            <div class="pmb-icon pmb-icon-crimson"><i class="fa-solid fa-heart-pulse"></i></div>
+            <div class="pmb-text">
+              <span class="pmb-title">Koronka do Miłosierdzia</span>
+              <span class="pmb-sub">Wyznanie wiary / Credo</span>
+            </div>
+            <i class="fa-solid fa-chevron-right pmb-arrow"></i>
+          </button>
         </div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Tajemnice niedzielne — chwalebne</p>
-          <p class="pm-reading-text">I. Zmartwychwstanie Pana Jezusa<br>II. Wniebowstąpienie Pana Jezusa<br>III. Zesłanie Ducha Świętego<br>IV. Wniebowzięcie Najświętszej Maryi Panny<br>V. Ukoronowanie NMP w niebie</p>
+      </div>
+    </div>
+
+    <!-- PODSTRONA 3 – widok szczegółowy modlitwy -->
+    <div id="pm-view-3-detail" class="pm-subview">
+      <div class="pm-topbar">
+        <div class="pm-back-btn" id="pmb-back-btn" role="button" aria-label="Wróć do Małego Modlitewnika"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info">
+          <span class="pm-topbar-title" id="pmb-detail-title">Modlitwa</span>
+          <span class="pm-topbar-date" id="pmb-detail-sub"></span>
         </div>
-        <div class="pm-section-label" style="margin-top:18px"><i class="fa-solid fa-heart"></i> Koronka do Miłosierdzia Bożego</div>
-        <div class="pm-reading-box">
-          <p class="pm-reading-text">Na początku: Ojcze nasz... Zdrowaś Maryjo... Wierzę w Boga...<br><br>Na paciorku większym: <em>«Ojcze Przedwieczny, ofiaruję Ci Ciało i Krew, Duszę i Bóstwo najmilszego Syna Twojego, na przebłaganie za grzechy nasze i świata całego.»</em><br><br>Na paciorku mniejszym (10 razy): <em>«Dla Jego bolesnej Męki, miej miłosierdzie dla nas i całego świata.»</em><br><br>Na zakończenie (3 razy): <em>«Święty Boże, Święty Mocny, Święty Nieśmiertelny – zmiłuj się nad nami i nad całym światem.»</em></p>
-        </div>
-        <div class="pm-section-label" style="margin-top:18px"><i class="fa-solid fa-star"></i> Modlitwy codzienne</div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Ojcze nasz</p>
-          <p class="pm-reading-text pm-prayer-center">Ojcze nasz, któryś jest w niebie,<br>święć się imię Twoje;<br>przyjdź królestwo Twoje;<br>bądź wola Twoja jako w niebie, tak i na ziemi.<br>Chleba naszego powszedniego daj nam dzisiaj;<br>i odpuść nam nasze winy,<br>jako i my odpuszczamy naszym winowajcom;<br>i nie wódź nas na pokuszenie,<br>ale nas zbaw ode złego. Amen.</p>
-        </div>
-        <div class="pm-reading-box">
-          <p class="pm-hymn-title">Zdrowaś Maryjo</p>
-          <p class="pm-reading-text pm-prayer-center">Zdrowaś Maryjo, łaski pełna,<br>Pan z Tobą,<br>błogosławionaś Ty między niewiastami<br>i błogosławiony owoc żywota Twojego, Jezus.<br><br>Święta Maryjo, Matko Boża,<br>módl się za nami grzesznymi,<br>teraz i w godzinę śmierci naszej. Amen.</p>
-        </div>
+      </div>
+      <div class="pm-scroll">
+        <div class="pm-reading-box pmb-detail-box" id="pmb-detail-body"></div>
       </div>
     </div>
 
@@ -3300,6 +3407,80 @@
 
         document.querySelectorAll('.pm-back-to-dash').forEach(function(btn) {
           btn.addEventListener('click', backToDash);
+        });
+
+        // ── Mały Modlitewnik – baza treści modlitw ────────────
+        var pmbPrayers = {
+          'ojcze-nasz': {
+            title: 'Ojcze Nasz',
+            sub: 'Modlitwa Pańska',
+            body: '<p class="pm-reading-text pm-prayer-center">Ojcze nasz, któryś jest w niebie,<br>święć się imię Twoje;<br>przyjdź królestwo Twoje;<br>bądź wola Twoja jako w niebie, tak i na ziemi.<br><br>Chleba naszego powszedniego daj nam dzisiaj;<br>i odpuść nam nasze winy,<br>jako i my odpuszczamy naszym winowajcom;<br>i nie wódź nas na pokuszenie,<br>ale nas zbaw ode złego.<br><br><strong>Amen.</strong></p>'
+          },
+          'zdrowas': {
+            title: 'Zdrowaś Maryjo',
+            sub: 'Pozdrowienie Anielskie',
+            body: '<p class="pm-reading-text pm-prayer-center">Zdrowaś Maryjo, łaski pełna,<br>Pan z Tobą,<br>błogosławionaś Ty między niewiastami<br>i błogosławiony owoc żywota Twojego, Jezus.<br><br>Święta Maryjo, Matko Boża,<br>módl się za nami grzesznymi,<br>teraz i w godzinę śmierci naszej.<br><br><strong>Amen.</strong></p>'
+          },
+          'wierze': {
+            title: 'Wierzę w Boga',
+            sub: 'Skład Apostolski',
+            body: '<p class="pm-reading-text pm-prayer-center">Wierzę w Boga, Ojca wszechmogącego,<br>Stworzyciela nieba i ziemi.<br><br>I w Jezusa Chrystusa, Syna Jego jedynego, Pana naszego,<br>który się począł z Ducha Świętego,<br>narodził się z Maryi Panny,<br>umęczon pod Ponckim Piłatem,<br>ukrzyżowan, umarł i pogrzebion,<br>zstąpił do piekieł,<br>trzeciego dnia zmartwychwstał,<br>wstąpił na niebiosa,<br>siedzi po prawicy Boga Ojca wszechmogącego,<br>stamtąd przyjdzie sądzić żywych i umarłych.<br><br>Wierzę w Ducha Świętego,<br>Święty Kościół powszechny,<br>Świętych obcowanie,<br>grzechów odpuszczenie,<br>ciała zmartwychwstanie,<br>żywot wieczny.<br><br><strong>Amen.</strong></p>'
+          },
+          'pod-twoja': {
+            title: 'Pod Twoją obronę',
+            sub: 'Antyfona maryjna',
+            body: '<p class="pm-reading-text pm-prayer-center">Pod Twoją obronę uciekamy się,<br>Święta Boża Rodzicielko,<br>naszymi prośbami racz nie gardzić<br>w potrzebach naszych,<br>ale od wszelkich złych przygód<br>racz nas zawsze wybawiać,<br>Panno chwalebna i błogosławiona.<br><br>O Pani nasza, Orędowniczko nasza,<br>Pośredniczko nasza, Pocieszycielko nasza,<br>z Synem swoim nas pojednaj,<br>Synowi swojemu nas polecaj,<br>swojemu Synowi nas oddawaj.<br><br><strong>Amen.</strong></p>'
+          },
+          'aniol-panski': {
+            title: 'Anioł Pański',
+            sub: 'Angelus Domini',
+            body: '<p class="pm-reading-text pm-prayer-center">Anioł Pański zwiastował Pannie Maryi<br>i poczęła z Ducha Świętego.<br><em>Zdrowaś Maryjo…</em><br><br>Oto ja służebnica Pańska,<br>niech mi się stanie według słowa Twego.<br><em>Zdrowaś Maryjo…</em><br><br>A Słowo stało się Ciałem<br>i zamieszkało między nami.<br><em>Zdrowaś Maryjo…</em><br><br>Módl się za nami, Święta Boża Rodzicielko,<br>Abyśmy się stali godnymi obietnic Chrystusowych.<br><br>Módlmy się:<br>Łaskę Twoją, prosimy Cię Panie, racz wlać w serca nasze,<br>abyśmy, którzy za zwiastowaniem anielskim<br>Wcielenie Chrystusa Syna Twego poznali,<br>przez Mękę Jego i Krzyż do chwały Zmartwychwstania<br>byli doprowadzeni. Przez Chrystusa Pana naszego.<br><br><strong>Amen.</strong></p>'
+          },
+          'wieczorna': {
+            title: 'Modlitwa wieczorna',
+            sub: 'Na zakończenie dnia',
+            body: '<p class="pm-reading-text pm-prayer-center">Boże, w Trójcy Świętej jedyny,<br>dziękuję Ci za ten dzień miniony,<br>za wszystkie łaski i dary, które mi zsyłałeś,<br>za natchnienia Ducha Świętego.<br><br>Przepraszam Cię za wszystkie grzechy i uchybienia,<br>które popełniłem(am) tej doby<br>myślą, mową, uczynkiem i zaniedbaniem.<br><br>Proszę Cię, czuwaj nade mną tej nocy,<br>strzeż mnie od wszelkiego złego,<br>daj mi spokojny sen,<br>abym jutro wypoczęty(a) służył(a) Tobie<br>i bliźnim swoim.<br><br>W Twoje ręce, Panie,<br>oddaję ducha mego.<br><br><strong>Amen.</strong></p>'
+          },
+          'aniol-stróz': {
+            title: 'Modlitwa do Anioła Stróża',
+            sub: 'Tradycyjna modlitwa katolicka',
+            body: '<p class="pm-reading-text pm-prayer-center">Aniele Boży,<br>Stróżu mój,<br>Ty zawsze przy mnie stój.<br><br>Rano, wieczór, we dnie, w nocy<br>bądź mi zawsze ku pomocy.<br><br>Strzeż duszy, ciała mego,<br>zaprowadź mnie do żywota wiecznego.<br><br><strong>Amen.</strong></p>'
+          },
+          'wschod-slonca': {
+            title: 'Modlitwa poranna',
+            sub: 'O wschodzie słońca',
+            body: '<p class="pm-reading-text pm-prayer-center">Boże, Stwórco dnia i nocy,<br>dziękuję Ci, że strzegłeś mnie tej nocy<br>i pozwoliłeś mi doczekać tego poranka.<br><br>Ofiaruję Ci ten nowy dzień:<br>moje myśli, słowa i czyny,<br>moje radości i smutki,<br>moje trudy i odpoczynek.<br><br>Niech wszystko, co uczynię,<br>będzie na Twoją chwałę<br>i ku pożytkowi bliźnich.<br><br>Duchu Święty, prowadź mnie<br>przez ten dzień i oświecaj<br>każdy mój krok.<br><br><strong>Amen.</strong></p>'
+          },
+          'koronka': {
+            title: 'Koronka do Miłosierdzia Bożego',
+            sub: 'Wyznanie wiary · Credo',
+            body: '<p class="pm-reading-text"><strong>Na początku:</strong> Ojcze nasz… Zdrowaś Maryjo… Wierzę w Boga…</p><p class="pm-reading-text"><strong>Na paciorku większym:</strong><br><em>«Ojcze Przedwieczny, ofiaruję Ci Ciało i Krew, Duszę i Bóstwo najmilszego Syna Twojego, Pana naszego Jezusa Chrystusa, na przebłaganie za grzechy nasze i świata całego.»</em></p><p class="pm-reading-text"><strong>Na paciorkach mniejszych (10 razy):</strong><br><em>«Dla Jego bolesnej Męki miej miłosierdzie dla nas i całego świata.»</em></p><p class="pm-reading-text"><strong>Na zakończenie (3 razy):</strong><br><em>«Święty Boże, Święty Mocny, Święty Nieśmiertelny – zmiłuj się nad nami i nad całym światem.»</em></p><p class="pm-reading-text pm-prayer-center"><strong>Amen.</strong></p>'
+          }
+        };
+
+        // ── Mały Modlitewnik – obsługa kliknięć i nawigacja ──
+        var pmbDetailView  = document.getElementById('pm-view-3-detail');
+        var pmbDetailTitle = document.getElementById('pmb-detail-title');
+        var pmbDetailSub   = document.getElementById('pmb-detail-sub');
+        var pmbDetailBody  = document.getElementById('pmb-detail-body');
+        var pmbBackBtn     = document.getElementById('pmb-back-btn');
+
+        document.querySelectorAll('.pmb-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var key    = btn.getAttribute('data-prayer');
+            var prayer = pmbPrayers[key];
+            if (!prayer) return;
+            if (pmbDetailTitle) pmbDetailTitle.textContent = prayer.title;
+            if (pmbDetailSub)   pmbDetailSub.textContent   = prayer.sub;
+            if (pmbDetailBody)  pmbDetailBody.innerHTML    = prayer.body;
+            resetAll();
+            showFlex(pmbDetailView);
+          });
+        });
+
+        if (pmbBackBtn) pmbBackBtn.addEventListener('click', function() {
+          resetAll();
+          showFlex(document.getElementById('pm-view-3'));
         });
 
         // ── Ściana Intencji ───────────────────────────────────
