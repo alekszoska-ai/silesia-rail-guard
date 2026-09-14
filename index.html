@@ -90,6 +90,8 @@
       margin: 0 auto;
       position: relative;
       isolation: isolate;
+      /* Zapas na safe-area i pasek Netlify */
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     .app-shell::before {
@@ -540,7 +542,18 @@
       border-radius: 24px 24px 0 0;
       overflow: hidden;
       position: relative;
-      z-index: 10;
+      /* Z-index wyższy niż badge Netlify (~9999) */
+      z-index: 10000;
+    }
+
+    /* Blokowanie pasków Netlify/innych iframe z zasłaniania interfejsu */
+    body > iframe[src*="netlify"],
+    body > div[data-netlify-badge],
+    #netlify-badge,
+    .netlify-badge,
+    [data-netlify] {
+      bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px)) !important;
+      z-index: 9998 !important;
     }
 
     .nav-item {
