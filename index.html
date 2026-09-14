@@ -34,11 +34,11 @@
         0 1px 0 rgba(255, 255, 255, 0.85) inset;
       --glass-radius: 20px;
 
-      /* Kolory ikon kafelków – oryginalna zróżnicowana paleta */
-      --c1: #007AFF;
-      /* niebieski   – aktualności  */
-      --c2: #E63B6F;
-      /* karmazynowy – intencje mszalne */
+      /* Kolory ikon kafelków – zróżnicowana paleta */
+      --c1: #E63B6F;
+      /* karmazynowy – intencje mszalne (1. kafelek) */
+      --c2: #007AFF;
+      /* niebieski   – aktualności   (2. kafelek) */
       --c3: #FF9500;
       /* pomarańczowy– słowo/modl.  */
       --c4: #AF52DE;
@@ -443,8 +443,8 @@
       font-size: 24px;
     }
 
-    .tile-1 .tile-icon i { color: var(--c1); filter: drop-shadow(0 2px 6px rgba(0, 122, 255, 0.40)); }
-    .tile-2 .tile-icon i { color: var(--c2); filter: drop-shadow(0 2px 6px rgba(230, 59, 111, 0.40)); }
+    .tile-1 .tile-icon i { color: var(--c1); filter: drop-shadow(0 2px 6px rgba(230, 59, 111, 0.40)); }
+    .tile-2 .tile-icon i { color: var(--c2); filter: drop-shadow(0 2px 6px rgba(0, 122, 255, 0.40)); }
     .tile-3 .tile-icon i { color: var(--c3); filter: drop-shadow(0 2px 6px rgba(255, 149, 0, 0.40)); }
     .tile-4 .tile-icon i { color: var(--c4); filter: drop-shadow(0 2px 6px rgba(175, 82, 222, 0.40)); }
     .tile-5 .tile-icon i { color: var(--c5); filter: drop-shadow(0 2px 6px rgba(255, 45, 85, 0.40)); }
@@ -1984,19 +1984,17 @@
       <!-- Siatka kafelków -->
       <div class="tiles-grid" id="tilesGrid">
 
-        <!-- 1. Aktualności parafialne -->
-        <div class="tile tile-1" role="button" tabindex="0" aria-label="Aktualności parafialne"
-          data-title="Aktualności parafialne"
-          data-body="Tutaj znajdziesz najnowsze ogłoszenia parafialne oraz intencje mszalne na bieżący tydzień.">
-          <div class="tile-badge" id="announcementBadge">3</div>
-          <div class="tile-icon"><i class="fa-solid fa-newspaper"></i></div>
-          <span class="tile-label">Aktualności parafialne</span>
-        </div>
-
-        <!-- 2. Intencje mszalne -->
-        <div class="tile tile-2" role="button" tabindex="0" aria-label="Intencje mszalne" id="tile-intentions">
+        <!-- 1. Intencje mszalne -->
+        <div class="tile tile-1" role="button" tabindex="0" aria-label="Intencje mszalne" id="tile-intentions">
           <div class="tile-icon"><i class="fa-solid fa-calendar-days"></i></div>
           <span class="tile-label">Intencje mszalne</span>
+        </div>
+
+        <!-- 2. Aktualności parafialne -->
+        <div class="tile tile-2" role="button" tabindex="0" aria-label="Aktualności parafialne" id="tile-news">
+          <div class="tile-badge" id="announcementBadge">1</div>
+          <div class="tile-icon"><i class="fa-solid fa-newspaper"></i></div>
+          <span class="tile-label">Aktualności parafialne</span>
         </div>
 
         <!-- 3. Słowo i Modlitwa -->
@@ -2350,10 +2348,9 @@
       <span class="news-topbar-badge" id="newsBadgeCount"></span>
     </div>
 
-    <!-- Zakładki -->
+    <!-- Zakładki (bez Intencji – przeniesione do osobnego modułu) -->
     <div class="news-tabs">
       <button class="news-tab-btn active" data-category="ogloszenia">Ogłoszenia</button>
-      <button class="news-tab-btn" data-category="intencje">Intencje</button>
       <button class="news-tab-btn" data-category="nabozenstwa">Nabożeństwa obrzędowe</button>
       <button class="news-tab-btn" data-category="koledy">Kolędy</button>
     </div>
@@ -3017,30 +3014,76 @@
 
       renderNews();
 
-      // Dynamiczny badge kafelka "Aktualności"
-      const mainTileBadge = document.getElementById('announcementBadge');
-      if (mainTileBadge) {
-        const totalAnnouncements = mockNews.filter(n => n.category === 'ogloszenia').length;
-        if (totalAnnouncements > 0) {
-          mainTileBadge.textContent = totalAnnouncements;
-          mainTileBadge.style.display = 'flex';
-        } else {
-          mainTileBadge.style.display = 'none';
+
+
+      // --- 3. OBSŁUGA KAFELKA INTENCJE MSZALNE (tile-1) ---
+      const intentionsTile = document.getElementById('tile-intentions');
+      const intentionsModal = document.getElementById('intentions-modal');
+      const intentionsBackBtn = document.getElementById('intentionsBackBtn');
+
+      function renderIntentionsModal() {
+        const list = document.getElementById('intentions-list');
+        if (!list) return;
+        list.innerHTML = '';
+        const intencje = mockNews.filter(n => n.category === 'intencje');
+        if (intencje.length === 0) {
+          list.innerHTML = '<div class="news-empty"><i class="fa-solid fa-calendar-days"></i><p>Brak intencji mszalnych.</p></div>';
+          return;
         }
-      }
-
-      // --- 3. OBSŁUGA KLIKNIĘĆ (MODAL AKTUALNOŚCI) ---
-      const newsTile = document.querySelector('.tile-1');
-      const newsModal = document.getElementById('news-modal');
-      const backBtn = document.getElementById('newsBackBtn');
-
-      if (newsTile && newsModal) {
-        newsTile.addEventListener('click', (e) => {
-          e.preventDefault();
-          newsModal.classList.remove('hidden');
+        intencje.forEach(news => {
+          const card = document.createElement('div');
+          card.className = 'news-card';
+          const massesHTML = (news.masses || []).map(m => {
+            const dashIdx = m.indexOf(' - ');
+            const time = dashIdx > -1 ? m.slice(0, dashIdx).trim() : m;
+            const intention = dashIdx > -1 ? m.slice(dashIdx + 3).trim() : '';
+            return `<div class="news-mass-row"><span class="news-mass-time">${time}</span><span class="news-mass-intention">${intention}</span></div>`;
+          }).join('');
+          card.innerHTML = `
+            <div class="news-card-header">
+              <div class="news-card-date-icon"><i class="fa-solid fa-calendar-days"></i></div>
+              <div class="news-card-date-info">
+                <div class="news-card-date">${news.date}</div>
+                <div class="news-card-liturgy">${news.title}</div>
+              </div>
+            </div>
+            <div class="news-masses-label">MSZE ŚWIĘTE</div>
+            ${massesHTML || '<p style="color:rgba(255,255,255,0.5);font-size:13px">Brak intencji w tym dniu.</p>'}
+          `;
+          list.appendChild(card);
         });
       }
 
+      if (intentionsTile && intentionsModal) {
+        intentionsTile.addEventListener('click', () => {
+          renderIntentionsModal();
+          intentionsModal.classList.remove('hidden');
+        });
+      }
+      if (intentionsBackBtn && intentionsModal) {
+        intentionsBackBtn.addEventListener('click', () => {
+          intentionsModal.classList.add('hidden');
+        });
+      }
+
+      // --- 3b. OBSŁUGA KAFELKA AKTUALNOŚCI (tile-2) ---
+      const newsTile = document.getElementById('tile-news');
+      const newsModal = document.getElementById('news-modal');
+      const backBtn = document.getElementById('newsBackBtn');
+
+      // Badge: liczba ogłoszeń
+      const mainTileBadge = document.getElementById('announcementBadge');
+      if (mainTileBadge) {
+        const totalAnnouncements = mockNews.filter(n => n.category === 'ogloszenia').length;
+        mainTileBadge.textContent = totalAnnouncements;
+        mainTileBadge.style.display = totalAnnouncements > 0 ? 'flex' : 'none';
+      }
+
+      if (newsTile && newsModal) {
+        newsTile.addEventListener('click', () => {
+          newsModal.classList.remove('hidden');
+        });
+      }
       if (backBtn && newsModal) {
         backBtn.addEventListener('click', () => {
           newsModal.classList.add('hidden');
@@ -3117,59 +3160,7 @@
         });
       });
 
-      // --- 5. OBSŁUGA KAFELKA INTENCJE MSZALNE ---
-      const intentionsTile = document.getElementById('tile-intentions');
-      const intentionsModal = document.getElementById('intentions-modal');
-      const intentionsBackBtn = document.getElementById('intentionsBackBtn');
-
-      // Renderowanie intencji mszalnych z mockNews
-      function renderIntentionsModal() {
-        const list = document.getElementById('intentions-list');
-        if (!list) return;
-        list.innerHTML = '';
-        const intencje = mockNews.filter(n => n.category === 'intencje');
-        if (intencje.length === 0) {
-          list.innerHTML = '<div class="news-empty"><i class="fa-solid fa-calendar-days"></i><p>Brak intencji mszalnych.</p></div>';
-          return;
-        }
-        intencje.forEach(news => {
-          const card = document.createElement('div');
-          card.className = 'news-card';
-          const massesHTML = news.masses ? news.masses.map(m => {
-            const dashIdx = m.indexOf(' - ');
-            const time = dashIdx > -1 ? m.slice(0, dashIdx).trim() : m;
-            const intention = dashIdx > -1 ? m.slice(dashIdx + 3).trim() : '';
-            return `<div class="news-mass-row"><span class="news-mass-time">${time}</span><span class="news-mass-intention">${intention}</span></div>`;
-          }).join('') : '';
-          card.innerHTML = `
-            <div class="news-card-header">
-              <div class="news-card-date-icon"><i class="fa-solid fa-calendar-days"></i></div>
-              <div class="news-card-date-info">
-                <div class="news-card-date">${news.date}</div>
-                <div class="news-card-liturgy">${news.title}</div>
-              </div>
-            </div>
-            <div class="news-masses-label">MSZE ŚWIĘTE</div>
-            ${massesHTML}
-          `;
-          list.appendChild(card);
-        });
-      }
-
-      if (intentionsTile && intentionsModal) {
-        intentionsTile.addEventListener('click', () => {
-          renderIntentionsModal();
-          intentionsModal.classList.remove('hidden');
-        });
-      }
-
-      if (intentionsBackBtn && intentionsModal) {
-        intentionsBackBtn.addEventListener('click', () => {
-          intentionsModal.classList.add('hidden');
-        });
-      }
-
-      // --- 5b. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
+      // --- 5. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
       const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-2):not(.tile-3):not(.tile-4)');
       const genericModal = document.getElementById('modalOverlay');
       const modalTitle = document.getElementById('modalTitle');
