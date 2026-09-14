@@ -1590,6 +1590,28 @@
       transform: translateY(18px);
     }
 
+    /* ============================================================
+       MODAL: INTENCJE MSZALNE
+    ============================================================ */
+    #intentions-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 205;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, rgba(8, 18, 45, 0.97), rgba(15, 30, 70, 0.92));
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
+
+    #intentions-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(18px);
+    }
+
     /* Górny pasek nawigacyjny */
     .news-topbar {
       flex-shrink: 0;
@@ -2614,30 +2636,25 @@
   </div><!-- /#prayers-modal -->
 
   <!-- ===== MODAL: INTENCJE MSZALNE ===== -->
-  <div id="intentions-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Intencje mszalne"
-    style="position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;
-    background:linear-gradient(135deg,rgba(8,18,45,0.95),rgba(15,30,70,0.85));
-    backdrop-filter:blur(12px) saturate(160%);
-    -webkit-backdrop-filter:blur(12px) saturate(160%);
-    transition:opacity 0.28s ease,transform 0.28s cubic-bezier(0.22,1,0.36,1);overflow:hidden;">
+  <div id="intentions-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Intencje mszalne">
 
     <!-- Symbole w tle -->
     <div class="news-symbols-bg" aria-hidden="true">
-      <i class="fa-solid fa-cross symbol-1"></i>
-      <i class="fa-solid fa-dove symbol-2"></i>
+      <i class="fa-solid fa-calendar-days symbol-1"></i>
+      <i class="fa-solid fa-cross symbol-2"></i>
       <i class="fa-solid fa-church symbol-5"></i>
     </div>
 
     <!-- Górny pasek -->
-    <div class="news-topbar">
-      <div class="news-back-btn" id="intentionsBackBtn" role="button" aria-label="Zamknij intencje mszalne">
+    <div class="news-topbar" style="z-index:2;position:relative;">
+      <div class="news-back-btn" id="intentionsBackBtn" role="button" aria-label="Zamknij intencje mszalne" tabindex="0">
         <i class="fa-solid fa-arrow-left"></i>
       </div>
       <span class="news-topbar-title">Intencje mszalne</span>
     </div>
 
     <!-- Lista intencji -->
-    <div class="news-scroll">
+    <div class="news-scroll" style="position:relative;z-index:1;">
       <div id="intentions-list"></div>
     </div>
   </div>
@@ -3119,9 +3136,9 @@
           const card = document.createElement('div');
           card.className = 'news-card';
           const massesHTML = news.masses ? news.masses.map(m => {
-            const parts = m.split(' - ');
-            const time = parts[0] ? parts[0].trim() : '';
-            const intention = parts.slice(1).join(' - ').trim();
+            const dashIdx = m.indexOf(' - ');
+            const time = dashIdx > -1 ? m.slice(0, dashIdx).trim() : m;
+            const intention = dashIdx > -1 ? m.slice(dashIdx + 3).trim() : '';
             return `<div class="news-mass-row"><span class="news-mass-time">${time}</span><span class="news-mass-intention">${intention}</span></div>`;
           }).join('') : '';
           card.innerHTML = `
