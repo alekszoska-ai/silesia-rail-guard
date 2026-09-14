@@ -37,8 +37,8 @@
       /* Kolory ikon kafelków – oryginalna zróżnicowana paleta */
       --c1: #007AFF;
       /* niebieski   – aktualności  */
-      --c2: #34C759;
-      /* zielony     – notatki      */
+      --c2: #E63B6F;
+      /* karmazynowy – intencje mszalne */
       --c3: #FF9500;
       /* pomarańczowy– słowo/modl.  */
       --c4: #AF52DE;
@@ -444,7 +444,7 @@
     }
 
     .tile-1 .tile-icon i { color: var(--c1); filter: drop-shadow(0 2px 6px rgba(0, 122, 255, 0.40)); }
-    .tile-2 .tile-icon i { color: var(--c2); filter: drop-shadow(0 2px 6px rgba(52, 199, 89, 0.40)); }
+    .tile-2 .tile-icon i { color: var(--c2); filter: drop-shadow(0 2px 6px rgba(230, 59, 111, 0.40)); }
     .tile-3 .tile-icon i { color: var(--c3); filter: drop-shadow(0 2px 6px rgba(255, 149, 0, 0.40)); }
     .tile-4 .tile-icon i { color: var(--c4); filter: drop-shadow(0 2px 6px rgba(175, 82, 222, 0.40)); }
     .tile-5 .tile-icon i { color: var(--c5); filter: drop-shadow(0 2px 6px rgba(255, 45, 85, 0.40)); }
@@ -1076,6 +1076,8 @@
     .pm-tile-green .pm-tile-icon { background: rgba(60,200,120,0.20); color: #5de8a0; }
     .pm-tile-blue { background: linear-gradient(145deg,rgba(20,70,160,0.55),rgba(30,100,210,0.35)); box-shadow: 0 8px 24px rgba(20,70,180,0.25); }
     .pm-tile-blue .pm-tile-icon { background: rgba(60,130,255,0.20); color: #7ab8ff; }
+    .pm-tile-teal { background: linear-gradient(145deg,rgba(10,120,100,0.55),rgba(20,160,130,0.35)); box-shadow: 0 8px 24px rgba(10,140,110,0.25); }
+    .pm-tile-teal .pm-tile-icon { background: rgba(40,210,170,0.20); color: #40e0c8; }
     .pm-section-label {
       font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
       color: rgba(160,200,255,0.7); margin: 18px 0 10px; display: flex; align-items: center; gap: 6px;
@@ -1969,12 +1971,10 @@
           <span class="tile-label">Aktualności parafialne</span>
         </div>
 
-        <!-- 2. Notatki z kazania -->
-        <div class="tile tile-2" role="button" tabindex="0" aria-label="Notatki z kazania"
-          data-title="Notatki z kazania"
-          data-body="Zapisuj i przeglądaj swoje notatki z kazań. Synchronizacja z chmurą przez Firebase.">
-          <div class="tile-icon"><i class="fa-solid fa-pen-to-square"></i></div>
-          <span class="tile-label">Notatki z kazania</span>
+        <!-- 2. Intencje mszalne -->
+        <div class="tile tile-2" role="button" tabindex="0" aria-label="Intencje mszalne" id="tile-intentions">
+          <div class="tile-icon"><i class="fa-solid fa-calendar-days"></i></div>
+          <span class="tile-label">Intencje mszalne</span>
         </div>
 
         <!-- 3. Słowo i Modlitwa -->
@@ -2395,6 +2395,11 @@
             <span class="pm-tile-label">Ściana Intencji</span>
             <span class="pm-tile-sub">Wspólna modlitwa</span>
           </div>
+          <div class="pm-tile pm-tile-teal" id="pmTile5" role="button" tabindex="0" style="grid-column: 1 / -1;">
+            <div class="pm-tile-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+            <span class="pm-tile-label">Notatki z kazania</span>
+            <span class="pm-tile-sub">Zapisuj i przeglądaj notatki</span>
+          </div>
         </div>
       </div>
     </div>
@@ -2587,7 +2592,55 @@
       </div>
     </div>
 
+    <!-- PODSTRONA 5: Notatki z kazania -->
+    <div id="pm-view-5" class="pm-subview">
+      <div class="pm-topbar">
+        <div class="pm-back-btn pm-back-to-dash" role="button" aria-label="Wróć do pulpitu"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="pm-topbar-info">
+          <span class="pm-topbar-title">Notatki z kazania</span>
+          <span class="pm-topbar-date">Synchronizacja przez Firebase</span>
+        </div>
+      </div>
+      <div class="pm-scroll">
+        <div class="pm-section-label"><i class="fa-solid fa-pen-to-square"></i> Twoje notatki</div>
+        <div class="pm-reading-box" style="color: rgba(220,235,255,0.82); font-size: 15px; line-height: 1.7;">
+          <p style="text-align: center; margin-bottom: 16px;">📝</p>
+          <p>Moduł notatek z kazań jest w przygotowaniu. Wkrótce będziesz mógł zapisywać i synchronizować swoje notatki z kazań przez Firebase.</p>
+          <p style="margin-top: 12px; color: rgba(180,210,255,0.6); font-size: 13px;">Synchronizacja z chmurą · Dostęp offline</p>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /#prayers-modal -->
+
+  <!-- ===== MODAL: INTENCJE MSZALNE ===== -->
+  <div id="intentions-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Intencje mszalne"
+    style="position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;
+    background:linear-gradient(135deg,rgba(8,18,45,0.95),rgba(15,30,70,0.85));
+    backdrop-filter:blur(12px) saturate(160%);
+    -webkit-backdrop-filter:blur(12px) saturate(160%);
+    transition:opacity 0.28s ease,transform 0.28s cubic-bezier(0.22,1,0.36,1);overflow:hidden;">
+
+    <!-- Symbole w tle -->
+    <div class="news-symbols-bg" aria-hidden="true">
+      <i class="fa-solid fa-cross symbol-1"></i>
+      <i class="fa-solid fa-dove symbol-2"></i>
+      <i class="fa-solid fa-church symbol-5"></i>
+    </div>
+
+    <!-- Górny pasek -->
+    <div class="news-topbar">
+      <div class="news-back-btn" id="intentionsBackBtn" role="button" aria-label="Zamknij intencje mszalne">
+        <i class="fa-solid fa-arrow-left"></i>
+      </div>
+      <span class="news-topbar-title">Intencje mszalne</span>
+    </div>
+
+    <!-- Lista intencji -->
+    <div class="news-scroll">
+      <div id="intentions-list"></div>
+    </div>
+  </div>
 
   <!-- SKRYPTY APLIKACJI -->
   <script>
@@ -3047,8 +3100,60 @@
         });
       });
 
-      // --- 5. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
-      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-3):not(.tile-4)');
+      // --- 5. OBSŁUGA KAFELKA INTENCJE MSZALNE ---
+      const intentionsTile = document.getElementById('tile-intentions');
+      const intentionsModal = document.getElementById('intentions-modal');
+      const intentionsBackBtn = document.getElementById('intentionsBackBtn');
+
+      // Renderowanie intencji mszalnych z mockNews
+      function renderIntentionsModal() {
+        const list = document.getElementById('intentions-list');
+        if (!list) return;
+        list.innerHTML = '';
+        const intencje = mockNews.filter(n => n.category === 'intencje');
+        if (intencje.length === 0) {
+          list.innerHTML = '<div class="news-empty"><i class="fa-solid fa-calendar-days"></i><p>Brak intencji mszalnych.</p></div>';
+          return;
+        }
+        intencje.forEach(news => {
+          const card = document.createElement('div');
+          card.className = 'news-card';
+          const massesHTML = news.masses ? news.masses.map(m => {
+            const parts = m.split(' - ');
+            const time = parts[0] ? parts[0].trim() : '';
+            const intention = parts.slice(1).join(' - ').trim();
+            return `<div class="news-mass-row"><span class="news-mass-time">${time}</span><span class="news-mass-intention">${intention}</span></div>`;
+          }).join('') : '';
+          card.innerHTML = `
+            <div class="news-card-header">
+              <div class="news-card-date-icon"><i class="fa-solid fa-calendar-days"></i></div>
+              <div class="news-card-date-info">
+                <div class="news-card-date">${news.date}</div>
+                <div class="news-card-liturgy">${news.title}</div>
+              </div>
+            </div>
+            <div class="news-masses-label">MSZE ŚWIĘTE</div>
+            ${massesHTML}
+          `;
+          list.appendChild(card);
+        });
+      }
+
+      if (intentionsTile && intentionsModal) {
+        intentionsTile.addEventListener('click', () => {
+          renderIntentionsModal();
+          intentionsModal.classList.remove('hidden');
+        });
+      }
+
+      if (intentionsBackBtn && intentionsModal) {
+        intentionsBackBtn.addEventListener('click', () => {
+          intentionsModal.classList.add('hidden');
+        });
+      }
+
+      // --- 5b. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
+      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-2):not(.tile-3):not(.tile-4)');
       const genericModal = document.getElementById('modalOverlay');
       const modalTitle = document.getElementById('modalTitle');
       const modalBody = document.getElementById('modalBody');
@@ -3398,7 +3503,7 @@
         if (tilePrayers) tilePrayers.addEventListener('click', openModal);
         if (pmCloseBtn)  pmCloseBtn.addEventListener('click',  closeModal);
 
-        ['pmTile1','pmTile2','pmTile3','pmTile4'].forEach(function(id, i) {
+        ['pmTile1','pmTile2','pmTile3','pmTile4','pmTile5'].forEach(function(id, i) {
           var el = document.getElementById(id);
           if (el) el.addEventListener('click', function() {
             showSubview('pm-view-' + (i + 1));
