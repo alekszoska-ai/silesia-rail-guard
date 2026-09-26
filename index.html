@@ -3666,23 +3666,29 @@
           showFlex(document.getElementById('pm-view-3'));
         });
 
-        // ── Ściana Intencji (localStorage + walidacja + antyspam) ─────
-        var LS_INTENTIONS = 'parish_intentions_v1';
-        var LS_VOTED      = 'parish_voted_v1';
+        // ── Ściana Intencji – localStorage + wygaszanie (3 dni) + walidacja + antyspam ──
+        var LS_KEY    = 'parafia_intentions';
+        var LS_VOTED  = 'parafia_voted';
+        var EXPIRE_MS = 3 * 24 * 60 * 60 * 1000; // 3 doby w ms
 
-        var DEFAULT_INTENTIONS = [
-          { id: 'def_1', text: 'W intencji zdrowia dla chorego członka mojej rodziny.', count: 12 },
-          { id: 'def_2', text: 'Za wszystkich, którzy stracili bliskich w tym roku.',   count: 8  },
-          { id: 'def_3', text: 'O pokój na świecie i zakończenie wojen.',                count: 31 },
-          { id: 'def_4', text: 'Za dzieci przygotowujące się do Pierwszej Komunii Świętej.', count: 5 }
-        ];
+        // Domyslne intencje startowe – dostaja createdAt w chwili inicjalizacji,
+        // wiec rowniez wygasna po 3 dniach jak kazda inna intencja.
+        function makeDefaultIntentions() {
+          var now = new Date().getTime();
+          return [
+            { id: 'def_1', text: 'W intencji zdrowia dla chorego członka mojej rodziny.', count: 12, createdAt: now },
+            { id: 'def_2', text: 'Za wszystkich, którzy stracili bliskich w tym roku.',   count: 8,  createdAt: now },
+            { id: 'def_3', text: 'O pokój na świecie i zakończenie wojen.',                count: 31, createdAt: now },
+            { id: 'def_4', text: 'Za dzieci przygotowujące się do Pierwszej Komunii Świętej.', count: 5, createdAt: now }
+          ];
+        }
 
         function loadIntentions() {
-          try { var r = localStorage.getItem(LS_INTENTIONS); return r ? JSON.parse(r) : null; }
+          try { var r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; }
           catch(e) { return null; }
         }
         function saveIntentions(arr) {
-          try { localStorage.setItem(LS_INTENTIONS, JSON.stringify(arr)); } catch(e) {}
+          try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch(e) {}
         }
         function loadVoted() {
           try { var r = localStorage.getItem(LS_VOTED); return r ? JSON.parse(r) : {}; }
@@ -3692,32 +3698,56 @@
           try { localStorage.setItem(LS_VOTED, JSON.stringify(obj)); } catch(e) {}
         }
 
-        var intentions = loadIntentions() || JSON.parse(JSON.stringify(DEFAULT_INTENTIONS));
-        var voted      = loadVoted();
+        /* Filtr wygaszania: usuwa wpisy starsze niz EXPIRE_MS */
+        function pruneExpired(arr) {
+          var now = new Date().getTime();
+          return arr.filter(function(item) {
+            return now - (item.createdAt || 0) < EXPIRE_MS;
+          });
+        }
+
+        var rawLoaded  = loadIntentions();
+        var intentions = rawLoaded ? pruneExpired(rawLoaded) : makeDefaultIntentions();
+        // Jesli pruning cos usunql – zapisz oczyszczona wersje
+        if (rawLoaded && intentions.length !== rawLoaded.length) saveIntentions(intentions);
+        var voted = loadVoted();
 
         function escHtml(s) {
           return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
                   .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
         }
         function makeId() {
-          return 'usr_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,6);
+          return 'usr_' + new Date().getTime().toString(36) + '_' + Math.random().toString(36).slice(2,6);
+        }
+        function timeAgo(ts) {
+          if (!ts) return '';
+          var diff = new Date().getTime() - ts;
+          var d = Math.floor(diff / 86400000);
+          var h = Math.floor(diff / 3600000);
+          if (d >= 1) return d + (d === 1 ? ' dzień temu' : ' dni temu');
+          if (h >= 1) return h + ' godz. temu';
+          return 'przed chwilą';
         }
 
         function renderIntentions() {
           var list = document.getElementById('pm-intentions-list');
           if (!list) return;
+          // Pruning przy kazdym renderowaniu
+          intentions = pruneExpired(intentions);
           list.innerHTML = '';
           if (intentions.length === 0) {
-            list.innerHTML = '<p style="color:rgba(180,210,255,0.5);text-align:center;padding:24px 0;">' +
-              'Brak intencji. Dodaj pierwszą prośbę!</p>';
+            list.innerHTML = '<p style="color:rgba(180,210,255,0.5);text-align:center;padding:24px 0 8px;">' +
+              'Brak aktywnych intencji.<br>Bądź pierwszy i dodaj swoją prośbę!</p>';
             return;
           }
           intentions.forEach(function(item, i) {
             var already = !!voted[item.id];
-            var card = document.createElement('div');
+            var ago     = timeAgo(item.createdAt);
+            var card    = document.createElement('div');
             card.className = 'pm-intention-card';
             card.innerHTML =
               '<p class="pm-intention-text">' + escHtml(item.text) + '</p>' +
+              (ago ? '<p style="font-size:11px;color:rgba(180,210,255,0.38);margin:-6px 0 10px;">' + ago + '</p>' : '') +
               '<button class="pm-pray-btn' + (already ? ' pm-pray-btn--active' : '') +
               '" data-idx="' + i + '"' + (already ? ' disabled aria-disabled="true"' : '') + '>' +
               '<i class="fa-solid fa-hands-praying"></i> ' +
@@ -3795,13 +3825,14 @@
             if (fVerify) { fVerify.classList.add('pm-input--error'); fVerify.focus(); } return;
           }
           if (fVerify) fVerify.classList.remove('pm-input--error');
-          intentions.unshift({ id: makeId(), text: txt, count: 0 });
+          // Nowa intencja z timestampem – wygasnie po 3 dobach
+          intentions.unshift({ id: makeId(), text: txt, count: 0, createdAt: new Date().getTime() });
           saveIntentions(intentions);
           if (fText)   fText.value   = '';
           if (fVerify) fVerify.value = '';
           updateCount();
-          showFormMsg('Intencja została dodana. Niech Pan przyjmie tę modlitwę 🙏', 'ok');
-          setTimeout(closeForm, 2600);
+          showFormMsg('Intencja dodana – wygaśnie po 3 dniach. Niech Pan przyjmie tę modlitwę 🙏', 'ok');
+          setTimeout(closeForm, 2800);
           renderIntentions();
         });
 
