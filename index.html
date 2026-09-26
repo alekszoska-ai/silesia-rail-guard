@@ -2792,31 +2792,42 @@
       </div>
       <span class="news-topbar-title">Cmentarz Parafialny</span>
     </div>
-    <div class="news-scroll" style="position:relative;z-index:1; padding: 20px;">
+    <div class="news-scroll" style="position:relative; z-index:1; padding: 16px;">
       
-      <!-- Sekcja A: Administracja -->
-      <div class="pm-section-label" style="display:block; margin-bottom: 10px;"><i class="fa-solid fa-building-user"></i> Administracja</div>
-      <div class="pm-reading-box" style="margin-bottom: 24px; padding: 16px; font-size: 14px; color: rgba(220,235,255,0.9);">
-        <p style="margin-bottom:4px;"><strong>Zarządca:</strong> Kancelaria Parafialna</p>
-        <p style="margin-bottom:4px;"><strong>Adres:</strong> ul. Przemysłowa 34 (Cmentarz w Bogwidzowach)</p>
-        <p style="margin-bottom:4px;"><strong>Godziny otwarcia cmentarza:</strong> 7:00 - 20:00 (latem do 22:00)</p>
-        <p><strong>Telefon:</strong> 123 456 789 (w godzinach pracy kancelarii)</p>
+      <!-- Kafel 1: Administracja i Kontakt -->
+      <div class="pm-reading-box" style="margin-bottom: 16px; padding: 16px; font-size: 14px; color: rgba(220,235,255,0.9);">
+        <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-building-user"></i> Administracja i Kontakt
+        </div>
+        <p style="margin-bottom:6px;"><strong>Zarządca:</strong> Kancelaria Parafialna</p>
+        <p style="margin-bottom:6px;"><strong>Adres:</strong> ul. Przemysłowa 34 (Cmentarz w Bogwidzowach)</p>
+        <p style="margin-bottom:6px;"><strong>Godziny otwarcia cmentarza:</strong> 7:00 - 20:00 (latem do 22:00)</p>
+        <p><strong>Telefon:</strong> <a href="tel:+48798338085" style="color:#7ab8ff; text-decoration:none; font-weight:700;">+48 798 338 085</a> <span style="font-size:12px; color:rgba(180,210,255,0.7);">(w godz. pracy)</span></p>
       </div>
 
-      <!-- Sekcja B: Wyszukiwarka -->
-      <div class="pm-section-label" style="display:block; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass"></i> Wyszukiwarka grobów</div>
-      <input type="text" id="cemeterySearch" class="cemetery-search" placeholder="Szukaj po nazwisku..." autocomplete="off">
-      <div id="cemetery-list"></div>
+      <!-- Kafel 2: Regulamin Cmentarza (Akordeon) -->
+      <div class="accordion-item pm-reading-box" style="margin-bottom: 16px; padding: 0; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(100, 150, 255, 0.2);">
+        <div class="accordion-header" style="background: transparent; color: #fff; font-size: 16px; font-weight: 800; border-bottom: none; padding: 16px;">
+          <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-file-contract"></i> Regulamin Cmentarza</span>
+          <i class="fa-solid fa-chevron-down" style="opacity:0.7;"></i>
+        </div>
+        <div class="accordion-content" style="color: rgba(180,210,255,0.8);">
+          <ol style="margin-left: 20px; padding-bottom: 8px;">
+            <li>Osoby przebywające na cmentarzu zobowiązane są do zachowania ciszy i powagi.</li>
+            <li>Opieka nad grobami (utrzymanie czystości) należy do bliskich zmarłego.</li>
+            <li>Opłaty za przedłużenie ważności grobu na kolejne 20 lat należy wnosić u zarządcy.</li>
+            <li>Śmieci należy wrzucać wyłącznie do wyznaczonych kontenerów, z podziałem na szkło i plastik.</li>
+          </ol>
+        </div>
+      </div>
 
-      <!-- Sekcja C: Regulamin -->
-      <div class="pm-section-label" style="display:block; margin-top: 24px; margin-bottom: 10px;"><i class="fa-solid fa-file-contract"></i> Regulamin (skrót)</div>
-      <div class="pm-reading-box" style="margin-bottom: 24px; padding: 16px; font-size: 13px; color: rgba(180,210,255,0.7); line-height: 1.6;">
-        <ol style="margin-left: 20px;">
-          <li>Osoby przebywające na cmentarzu zobowiązane są do zachowania ciszy i powagi.</li>
-          <li>Opieka nad grobami (utrzymanie czystości) należy do bliskich zmarłego.</li>
-          <li>Opłaty za przedłużenie ważności grobu na kolejne 20 lat należy wnosić u zarządcy.</li>
-          <li>Śmieci należy wrzucać wyłącznie do wyznaczonych kontenerów, z podziałem na szkło i plastik.</li>
-        </ol>
+      <!-- Kafel 3: Wyszukiwarka Grobów -->
+      <div class="pm-reading-box" style="margin-bottom: 24px; padding: 16px; font-size: 14px; color: rgba(220,235,255,0.9);">
+        <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-magnifying-glass"></i> Wyszukiwarka Grobów
+        </div>
+        <input type="text" id="cemeterySearch" class="cemetery-search" placeholder="Wpisz nazwisko lub imię i nazwisko..." autocomplete="off">
+        <div id="cemetery-list"></div>
       </div>
     </div>
   </div>
@@ -3257,10 +3268,15 @@
         if (!cemeteryList) return;
         cemeteryList.innerHTML = '';
         const q = filter.toLowerCase().trim();
+        
+        if (q === '') {
+          return;
+        }
+
         const filtered = cemeteryData.filter(item => item.name.toLowerCase().includes(q));
         
         if (filtered.length === 0) {
-          cemeteryList.innerHTML = '<p style="color:rgba(180,210,255,0.5);text-align:center;padding:12px 0;">Nie znaleziono zmarłego o podanym nazwisku.</p>';
+          cemeteryList.innerHTML = '<p style="color:rgba(180,210,255,0.5);text-align:center;padding:12px 0;">Nie znaleziono zmarłego o podanych danych.</p>';
           return;
         }
 
@@ -3273,6 +3289,12 @@
             <div class="cemetery-card-detail"><i class="fa-solid fa-map-location-dot" style="width:16px;"></i> ${item.location}</div>
           `;
           cemeteryList.appendChild(card);
+        });
+      }
+
+      if (cemeterySearch) {
+        cemeterySearch.addEventListener('input', (e) => {
+          renderCemetery(e.target.value);
         });
       }
 
