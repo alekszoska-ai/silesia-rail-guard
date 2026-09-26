@@ -231,13 +231,21 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      /* Płynne przewijanie pionowe zamiast twardego ucięcia */
+      /* Płynne przewijanie pionowe – zapewnia dostępność ostatniego rzędu kafelków */
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      /* Dolny zapas: wysokość nawigacji + safe-area + 70px na badge Netlify */
-      padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 70px) 14px;
+      /*
+        Dolny padding = wysokość nawigacji (76px)
+        + safe-area-inset-bottom (home indicator iOS)
+        + 30px dodatkowy bufor na badge Netlify i margines wizualny
+      */
+      padding: 12px 14px
+        calc(var(--nav-h) + env(safe-area-inset-bottom, 20px) + 30px)
+        14px;
       scrollbar-width: none;
+      /* Wyłącz overscroll-behavior żeby nie blokować przewijania na iOS */
+      overscroll-behavior-y: contain;
     }
 
     .main-content::-webkit-scrollbar {
@@ -342,12 +350,16 @@
     .tiles-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      /* Wiersze: elastyczne z minimalną wysokością 80px – bez obcinania */
-      grid-template-rows: repeat(4, minmax(80px, 1fr));
-      gap: 10px;
+      /*
+        Wiersze: auto – każdy rząd dopasowuje się do zawartości.
+        Na małych ekranach grid jest przewijalny wewnątrz .main-content.
+        Na dużych ekranach wszystkie 4 rzędy mieszczą się bez scrollowania.
+      */
+      grid-template-rows: repeat(4, minmax(75px, auto));
+      gap: 9px;
       flex: 1;
       min-height: 0;
-      padding-bottom: 8px;
+      padding-bottom: 4px;
     }
 
     /* ============================================================
@@ -534,7 +546,12 @@
     ============================================================ */
     .bottom-nav {
       flex-shrink: 0;
-      height: var(--nav-h);
+      /*
+        Wysokość nawigacji + bezpieczny obszar dolny (home indicator iOS).
+        Używamy min-height żeby pasek nie był za mały na urządzeniach bez safe-area.
+      */
+      height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+      min-height: var(--nav-h);
       background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
@@ -543,7 +560,8 @@
         0 -8px 32px rgba(0, 0, 0, 0.05),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       display: flex;
-      align-items: stretch;
+      align-items: flex-start; /* wyrównaj ikony do góry, nie do środka rozszerzonej strefy */
+      padding-top: 0;
       border-radius: 24px 24px 0 0;
       overflow: hidden;
       position: relative;
@@ -551,14 +569,24 @@
       z-index: 10000;
     }
 
+    /* Wewnętrzne przyciski nawigacji – wyrównane w górnej części paska */
+    .bottom-nav .nav-item {
+      padding-top: 10px;
+      padding-bottom: 6px;
+    }
+
     /* Blokowanie pasków Netlify/innych iframe z zasłaniania interfejsu */
     body > iframe[src*="netlify"],
     body > div[data-netlify-badge],
+    body > div[style*="netlify"],
     #netlify-badge,
     .netlify-badge,
-    [data-netlify] {
-      bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px)) !important;
+    [data-netlify],
+    [id*="netlify"],
+    [class*="netlify"] {
+      bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 4px) !important;
       z-index: 9998 !important;
+      pointer-events: none !important;
     }
 
     .nav-item {
