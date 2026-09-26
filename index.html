@@ -2780,6 +2780,81 @@
     </div>
   </div>
 
+  <!-- ===== MODAL: WSPÓLNOTY I GRUPY ===== -->
+  <div id="communities-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Wspólnoty i Grupy">
+    <div class="news-symbols-bg" aria-hidden="true">
+      <i class="fa-solid fa-users symbol-1"></i>
+      <i class="fa-solid fa-hands-holding-circle symbol-2"></i>
+    </div>
+    
+    <!-- Widok Listy Wspólnot -->
+    <div id="communities-list-view">
+      <div class="news-topbar" style="z-index:2;position:relative;">
+        <div class="news-back-btn" id="communitiesBackBtn" role="button" aria-label="Zamknij wspólnoty" tabindex="0">
+          <i class="fa-solid fa-arrow-left"></i>
+        </div>
+        <span class="news-topbar-title">Wspólnoty i Grupy</span>
+      </div>
+      <div class="news-scroll" style="position:relative; z-index:1; padding: 16px;">
+        <p style="color: rgba(220,235,255,0.8); margin-bottom: 20px; font-size: 14px; text-align: center;">Wybierz grupę, aby dowiedzieć się o niej więcej.</p>
+        
+        <div class="pm-reading-box community-card" data-group="rada" style="margin-bottom: 16px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 20px; color: #fff;">
+            <i class="fa-solid fa-users-viewfinder"></i>
+          </div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: #fff;">Rada Parafialna</div>
+            <div style="font-size: 13px; color: rgba(180,210,255,0.7); margin-top: 4px;">Organ doradczy i duszpasterski</div>
+          </div>
+        </div>
+        
+        <div class="pm-reading-box community-card" data-group="ministranci" style="margin-bottom: 16px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 20px; color: #fff;">
+            <i class="fa-solid fa-bell"></i>
+          </div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: #fff;">Ministranci i Lektorzy</div>
+            <div style="font-size: 13px; color: rgba(180,210,255,0.7); margin-top: 4px;">Liturgiczna Służba Ołtarza</div>
+          </div>
+        </div>
+
+        <div class="pm-reading-box community-card" data-group="dzieci" style="margin-bottom: 16px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 20px; color: #fff;">
+            <i class="fa-solid fa-child-reaching"></i>
+          </div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: #fff;">Dzieci Maryi</div>
+            <div style="font-size: 13px; color: rgba(180,210,255,0.7); margin-top: 4px;">Formacja maryjna dla dziewcząt</div>
+          </div>
+        </div>
+
+        <div class="pm-reading-box community-card" data-group="wsparcie" style="margin-bottom: 16px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 20px; color: #fff;">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+          </div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: #fff;">Grupa Wsparcia</div>
+            <div style="font-size: 13px; color: rgba(180,210,255,0.7); margin-top: 4px;">Dla osób uzależnionych</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Widok Szczegółowy Wspólnoty -->
+    <div id="communities-detail-view" class="hidden">
+      <div class="news-topbar" style="z-index:2;position:relative;">
+        <div class="news-back-btn" id="communityDetailBackBtn" role="button" aria-label="Wróć do listy wspólnot" tabindex="0">
+          <i class="fa-solid fa-arrow-left"></i>
+        </div>
+        <span class="news-topbar-title" id="communityDetailTitle">Szczegóły Grupy</span>
+      </div>
+      <div class="news-scroll" style="position:relative; z-index:1; padding: 16px;" id="communityDetailContent">
+        <!-- Zawartość wstrzykiwana przez JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- ===== MODAL: CMENTARZ PARAFIALNY ===== -->
   <div id="cemetery-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Cmentarz Parafialny">
     <div class="news-symbols-bg" aria-hidden="true">
@@ -3242,6 +3317,99 @@
         });
       }
 
+      // --- WSPÓLNOTY I GRUPY ---
+      const communitiesModal = document.getElementById('communities-modal');
+      const communitiesTile = document.querySelector('.tile-5');
+      const communitiesBackBtn = document.getElementById('communitiesBackBtn');
+      const communityDetailBackBtn = document.getElementById('communityDetailBackBtn');
+      const communitiesListView = document.getElementById('communities-list-view');
+      const communitiesDetailView = document.getElementById('communities-detail-view');
+      const communityDetailTitle = document.getElementById('communityDetailTitle');
+      const communityDetailContent = document.getElementById('communityDetailContent');
+      
+      const communityData = {
+        'rada': {
+          title: 'Rada Parafialna',
+          icon: 'fa-users-viewfinder',
+          desc: 'Rada Parafialna stanowi ciało doradcze wspierające Proboszcza w zarządzaniu sprawami duszpasterskimi i administracyjnymi parafii. Celem jest współodpowiedzialność świeckich za rozwój wspólnoty.',
+          schedule: 'Spotkania odbywają się raz w miesiącu (zazwyczaj pierwsza środa miesiąca) po Mszy Świętej wieczornej.',
+          location: 'Sala na plebanii.'
+        },
+        'ministranci': {
+          title: 'Ministranci i Lektorzy',
+          icon: 'fa-bell',
+          desc: 'Liturgiczna Służba Ołtarza gromadzi chłopców i młodzieńców, którzy pragną służyć Bogu poprzez posługę podczas Mszy Świętej i nabożeństw. Formacja obejmuje rozwój duchowy oraz naukę liturgii.',
+          schedule: 'Zbiórki: soboty godz. 9:00 (młodsi) i 10:00 (starsi).',
+          location: 'Salka pod kościołem / Zakrystia.'
+        },
+        'dzieci': {
+          title: 'Dzieci Maryi',
+          icon: 'fa-child-reaching',
+          desc: 'Wspólnota formacyjna dla dziewcząt ze szkół podstawowych. Skupia się na naśladowaniu cnót Matki Bożej, wspólnej modlitwie, śpiewie oraz wyjazdach integracyjno-rekolekcyjnych.',
+          schedule: 'Spotkania: każda sobota o godz. 11:00.',
+          location: 'Salka katechetyczna na wikariacie.'
+        },
+        'wsparcie': {
+          title: 'Grupa Wsparcia',
+          icon: 'fa-hand-holding-heart',
+          desc: 'Anonimowa grupa wsparcia dla osób zmagających się z nałogami oraz dla ich rodzin. Zapewniamy bezpieczną przestrzeń, wysłuchanie i modlitwę w drodze do wyzwolenia.',
+          schedule: 'Spotkania: piątki o godz. 19:00.',
+          location: 'Dolna salka parafialna (wejście od strony dzwonnicy).'
+        }
+      };
+
+      if (communitiesTile && communitiesModal) {
+        communitiesTile.addEventListener('click', () => {
+          communitiesModal.classList.remove('hidden');
+          if (communitiesListView && communitiesDetailView) {
+            communitiesListView.classList.remove('hidden');
+            communitiesDetailView.classList.add('hidden');
+          }
+        });
+      }
+      
+      if (communitiesBackBtn && communitiesModal) {
+        communitiesBackBtn.addEventListener('click', () => {
+          communitiesModal.classList.add('hidden');
+        });
+      }
+
+      if (communityDetailBackBtn) {
+        communityDetailBackBtn.addEventListener('click', () => {
+          communitiesDetailView.classList.add('hidden');
+          communitiesListView.classList.remove('hidden');
+        });
+      }
+
+      const communityCards = document.querySelectorAll('.community-card');
+      communityCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const groupId = card.getAttribute('data-group');
+          const data = communityData[groupId];
+          if (data && communityDetailTitle && communityDetailContent) {
+            communityDetailTitle.textContent = data.title;
+            communityDetailContent.innerHTML = `
+              <div style="text-align:center; margin-bottom: 24px; margin-top: 10px;">
+                <div style="display:inline-flex; width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.1); justify-content: center; align-items: center; font-size: 28px; color: #fff;">
+                  <i class="fa-solid ${data.icon}"></i>
+                </div>
+              </div>
+              <div class="pm-section-label" style="display:block; margin-bottom: 10px;">O Wspólnocie</div>
+              <div class="pm-reading-box" style="margin-bottom: 20px; padding: 16px; font-size: 14px; color: rgba(220,235,255,0.9); line-height: 1.6;">
+                ${data.desc}
+              </div>
+              <div class="pm-section-label" style="display:block; margin-bottom: 10px;">Spotkania</div>
+              <div class="pm-reading-box" style="padding: 16px; font-size: 14px; color: rgba(220,235,255,0.9); line-height: 1.6;">
+                <p style="margin-bottom: 8px;"><strong><i class="fa-regular fa-clock" style="width:16px;"></i> Terminy:</strong><br>${data.schedule}</p>
+                <p><strong><i class="fa-solid fa-map-location-dot" style="width:16px;"></i> Miejsce:</strong><br>${data.location}</p>
+              </div>
+            `;
+            communitiesListView.classList.add('hidden');
+            communitiesDetailView.classList.remove('hidden');
+          }
+        });
+      });
+
       // --- CMENTARZ PARAFIALNY ---
       const cemeteryModal = document.getElementById('cemetery-modal');
       const cemeteryTile = document.querySelector('.tile-6');
@@ -3421,7 +3589,7 @@
 
       // --- 5. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
       // Kafelki z atrapą (obecnie wszystkie oprócz pierwszych 4 i 6)
-      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-2):not(.tile-3):not(.tile-4):not(.tile-6)');
+      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-2):not(.tile-3):not(.tile-4):not(.tile-5):not(.tile-6)');
       const genericModal = document.getElementById('modalOverlay');
       const modalTitle = document.getElementById('modalTitle');
       const modalBody = document.getElementById('modalBody');
