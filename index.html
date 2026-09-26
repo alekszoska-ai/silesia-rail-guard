@@ -1675,6 +1675,60 @@
       transform: translateY(18px);
     }
 
+    /* ============================================================
+       MODAL: CMENTARZ
+    ============================================================ */
+    #cemetery-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 210;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, rgba(8, 18, 45, 0.97), rgba(15, 30, 70, 0.92));
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
+    #cemetery-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(18px);
+    }
+    .cemetery-card {
+      background: rgba(255,255,255,0.06); 
+      border: 1px solid rgba(100,150,255,0.18); 
+      border-radius: 14px; 
+      padding: 16px; 
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cemetery-card-name { font-size: 16px; font-weight: 700; color: #fff; }
+    .cemetery-card-detail { font-size: 13px; color: rgba(180,210,255,0.7); }
+    .cemetery-search {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(100,150,255,0.3);
+      background: rgba(10,25,60,0.5);
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 16px;
+      font-family: inherit;
+    }
+    .cemetery-search::placeholder { color: rgba(180,210,255,0.4); }
+    .cemetery-search:focus { outline: none; border-color: rgba(100,150,255,0.8); }
+    
+    html[data-font-size="large"] .cemetery-card-name { font-size: 18px; }
+    html[data-font-size="large"] .cemetery-card-detail { font-size: 15px; }
+    html[data-font-size="large"] .cemetery-search { font-size: 17px; }
+
+    html[data-font-size="xlarge"] .cemetery-card-name { font-size: 20px; }
+    html[data-font-size="xlarge"] .cemetery-card-detail { font-size: 17px; }
+    html[data-font-size="xlarge"] .cemetery-search { font-size: 19px; }
+
     /* Górny pasek nawigacyjny */
     .news-topbar {
       flex-shrink: 0;
@@ -2726,6 +2780,46 @@
     </div>
   </div>
 
+  <!-- ===== MODAL: CMENTARZ PARAFIALNY ===== -->
+  <div id="cemetery-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Cmentarz Parafialny">
+    <div class="news-symbols-bg" aria-hidden="true">
+      <i class="fa-solid fa-cross symbol-1"></i>
+      <i class="fa-solid fa-tree symbol-2"></i>
+    </div>
+    <div class="news-topbar" style="z-index:2;position:relative;">
+      <div class="news-back-btn" id="cemeteryBackBtn" role="button" aria-label="Zamknij cmentarz" tabindex="0">
+        <i class="fa-solid fa-arrow-left"></i>
+      </div>
+      <span class="news-topbar-title">Cmentarz Parafialny</span>
+    </div>
+    <div class="news-scroll" style="position:relative;z-index:1; padding: 20px;">
+      
+      <!-- Sekcja A: Administracja -->
+      <div class="pm-section-label" style="display:block; margin-bottom: 10px;"><i class="fa-solid fa-building-user"></i> Administracja</div>
+      <div class="pm-reading-box" style="margin-bottom: 24px; padding: 16px; font-size: 14px; color: rgba(220,235,255,0.9);">
+        <p style="margin-bottom:4px;"><strong>Zarządca:</strong> Kancelaria Parafialna (Bogwidzowy)</p>
+        <p style="margin-bottom:4px;"><strong>Godziny otwarcia cmentarza:</strong> 7:00 - 20:00 (latem do 22:00)</p>
+        <p><strong>Telefon:</strong> 123 456 789 (w godzinach pracy kancelarii)</p>
+      </div>
+
+      <!-- Sekcja B: Wyszukiwarka -->
+      <div class="pm-section-label" style="display:block; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass"></i> Wyszukiwarka grobów</div>
+      <input type="text" id="cemeterySearch" class="cemetery-search" placeholder="Szukaj po nazwisku..." autocomplete="off">
+      <div id="cemetery-list"></div>
+
+      <!-- Sekcja C: Regulamin -->
+      <div class="pm-section-label" style="display:block; margin-top: 24px; margin-bottom: 10px;"><i class="fa-solid fa-file-contract"></i> Regulamin (skrót)</div>
+      <div class="pm-reading-box" style="margin-bottom: 24px; padding: 16px; font-size: 13px; color: rgba(180,210,255,0.7); line-height: 1.6;">
+        <ol style="margin-left: 20px;">
+          <li>Osoby przebywające na cmentarzu zobowiązane są do zachowania ciszy i powagi.</li>
+          <li>Opieka nad grobami (utrzymanie czystości) należy do bliskich zmarłego.</li>
+          <li>Opłaty za przedłużenie ważności grobu na kolejne 20 lat należy wnosić u zarządcy.</li>
+          <li>Śmieci należy wrzucać wyłącznie do wyznaczonych kontenerów, z podziałem na szkło i plastik.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
   <!-- SKRYPTY APLIKACJI -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -3136,6 +3230,71 @@
         });
       }
 
+      // --- CMENTARZ PARAFIALNY ---
+      const cemeteryModal = document.getElementById('cemetery-modal');
+      const cemeteryTile = document.querySelector('.tile-6');
+      const cemeteryBackBtn = document.getElementById('cemeteryBackBtn');
+      const cemeterySearch = document.getElementById('cemeterySearch');
+      const cemeteryList = document.getElementById('cemetery-list');
+
+      const cemeteryData = [
+        { name: "Jan Kowalski", death: "12.05.2015", location: "Kwatera A, Rząd 1, Grób 4" },
+        { name: "Anna Nowak", death: "03.11.2020", location: "Kwatera B, Rząd 3, Grób 12" },
+        { name: "Piotr Wiśniewski", death: "22.07.2018", location: "Kwatera A, Rząd 2, Grób 8" },
+        { name: "Maria Wójcik", death: "15.01.2022", location: "Kwatera C, Rząd 5, Grób 21" },
+        { name: "Stanisław Kowalczyk", death: "09.09.2010", location: "Kwatera B, Rząd 1, Grób 2" }
+      ];
+
+      function renderCemetery(filter = "") {
+        if (!cemeteryList) return;
+        cemeteryList.innerHTML = '';
+        const q = filter.toLowerCase().trim();
+        const filtered = cemeteryData.filter(item => item.name.toLowerCase().includes(q));
+        
+        if (filtered.length === 0) {
+          cemeteryList.innerHTML = '<p style="color:rgba(180,210,255,0.5);text-align:center;padding:12px 0;">Nie znaleziono zmarłego o podanym nazwisku.</p>';
+          return;
+        }
+
+        filtered.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'cemetery-card';
+          card.innerHTML = `
+            <div class="cemetery-card-name">${item.name}</div>
+            <div class="cemetery-card-detail"><i class="fa-solid fa-calendar-xmark" style="width:16px;"></i> Zm.: ${item.death}</div>
+            <div class="cemetery-card-detail"><i class="fa-solid fa-map-location-dot" style="width:16px;"></i> ${item.location}</div>
+          `;
+          cemeteryList.appendChild(card);
+        });
+      }
+
+      if (cemeteryTile && cemeteryModal) {
+        cemeteryTile.addEventListener('click', () => {
+          cemeteryModal.classList.remove('hidden');
+          if (cemeterySearch) {
+            cemeterySearch.value = '';
+            renderCemetery('');
+          }
+        });
+      }
+
+      if (cemeteryBackBtn && cemeteryModal) {
+        cemeteryBackBtn.addEventListener('click', () => {
+          cemeteryModal.classList.add('hidden');
+        });
+      }
+
+      if (cemeterySearch) {
+        cemeterySearch.addEventListener('input', (e) => {
+          renderCemetery(e.target.value);
+        });
+      }
+      
+      if (cemeteryList) {
+        renderCemetery('');
+      }
+
+
       // --- 3b. OBSŁUGA KAFELKA AKTUALNOŚCI (tile-2) ---
       const newsTile = document.getElementById('tile-news');
       const newsModal = document.getElementById('news-modal');
@@ -3231,7 +3390,8 @@
       });
 
       // --- 5. OBSŁUGA POZOSTAŁYCH KAFELKÓW (Zastępczy modal) ---
-      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-2):not(.tile-3):not(.tile-4)');
+      // Kafelki z atrapą (obecnie wszystkie oprócz pierwszych 4 i 6)
+      const genericTiles = document.querySelectorAll('.tile:not(.tile-1):not(.tile-2):not(.tile-3):not(.tile-4):not(.tile-6)');
       const genericModal = document.getElementById('modalOverlay');
       const modalTitle = document.getElementById('modalTitle');
       const modalBody = document.getElementById('modalBody');
