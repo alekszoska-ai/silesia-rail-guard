@@ -231,20 +231,19 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      /* Płynne przewijanie pionowe – zapewnia dostępność ostatniego rzędu kafelków */
+      /* Przewijanie pionowe – ostatni rząd kafelków zawsze dostępny */
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       /*
         Dolny padding = wysokość nawigacji (76px)
         + safe-area-inset-bottom (home indicator iOS)
-        + 30px dodatkowy bufor na badge Netlify i margines wizualny
+        + 70px bufor na badge Netlify, pasek systemowy i margines wizualny
       */
       padding: 12px 14px
-        calc(var(--nav-h) + env(safe-area-inset-bottom, 20px) + 50px)
+        calc(var(--nav-h) + env(safe-area-inset-bottom, 20px) + 70px)
         14px;
       scrollbar-width: none;
-      /* Wyłącz overscroll-behavior żeby nie blokować przewijania na iOS */
       overscroll-behavior-y: contain;
     }
 
@@ -351,14 +350,13 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       /*
-        Wiersze: auto – każdy rząd dopasowuje się do zawartości.
-        Na małych ekranach grid jest przewijalny wewnątrz .main-content.
-        Na dużych ekranach wszystkie 4 rzędy mieszczą się bez scrollowania.
+        Wiersze: naturalna wysokość (nie 1fr!) – kafelki nie są ściskane.
+        flex:1 i min-height:0 usunięte: grid przyjmuje pełną naturalną
+        wysokość, a .main-content przewija go na małych ekranach.
       */
-      grid-template-rows: repeat(4, minmax(75px, auto));
+      grid-template-rows: repeat(4, minmax(82px, auto));
       gap: 9px;
-      flex: 1;
-      min-height: 0;
+      /* Brak flex:1 – grid NIE rozciąga się by wypełnić rodzica */
       padding-bottom: 4px;
     }
 
